@@ -1,4 +1,3 @@
-/*
 // Isn't it Odd?
 function isOdd(int) {
   if (int < 0) {
@@ -111,13 +110,66 @@ function isLeapYearOne(yr) {
   }
 }
 
-*/
-
 // Leap Years (Part 2)
+function isLeapYearTwo(yr) {
+  if (yr >= 1752) {
+    if (yr % 400 === 0) { 
+      console.log(true); 
+      return true; 
+    } else if (yr % 100 === 0) {
+      console.log(false);
+      return false;
+    } else if (yr % 4 === 0) {
+      console.log(true);
+      return true;
+    } else {
+      console.log(false);
+      return false;
+    }
+  } else {
+    console.log(yr % 4 === 0);
+    return yr % 4 === 0; 
+  }
+}
 
+// Multiples of 3 and 5
+function multisumOne(capNum) {
+  let result = 0; 
+  for (let i = 0; i <= capNum; i += 1) {
+    if (i % 3 === 0 || i % 5 === 0) {
+      result += i;
+    }
+  }
+  console.log(result);
+}
 
+function multisum(capNum) {
+  let multiples = [];
+  let factors = [3, 5]; 
+  let result;
 
+  factors.forEach(function(factor) {
+    let multiple; 
+    for (multiple = factor; multiple <= capNum; multiple += factor) {
+      if (multiples.indexOf(multiple) === -1) {
+        multiples.push(multiple);
+      }
+    }
+  });
 
+  result = multiples.reduce((sum, num) => sum + num, 0);
+  console.log(result);
+}
+
+// UTF-16 String Value. Write a function that determines and returns the UTF-16 string value of a string passed in as an argument. The UTF-16 string value is the sum of the UTF-16 values of every character in the string. (You may use String.prototype.charCodeAt() to determine the UTF-16 value of a character.)
+function utf16Value(str) {
+  let sum = 0;
+  for (let i = 0; i < str.length; i +=1) {
+    sum += str.charCodeAt(i);
+  }
+
+  console.log(sum);
+}
 
 
 
