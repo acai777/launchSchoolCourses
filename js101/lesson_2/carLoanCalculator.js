@@ -11,12 +11,16 @@ function carLoanCalculator() {
     let annualRate = getAPR();
     let monthlyRate = (annualRate / 12) / 100;
     let loanDuration = getDuration();
-    let monthlyPaymt = loanAmount *
-      (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
+    let monthlyPaymt;
+    if (monthlyRate === 0) { // edge case for 0 interest rate.
+      monthlyPaymt = loanAmount / loanDuration;
+    } else {
+      monthlyPaymt = loanAmount *
+        (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
+    }
     console.log(`The monthly mortgage payment would be ${monthlyPaymt.toFixed(2)} dollars.`);
-
-    // Ask to continue. If response is no, break.
-    prompt("Would you like to make another calculation?");
+    
+    prompt("Would you like to make another calculation?");     // Ask to continue. If response is no, break.
     let response = readline.question().toLowerCase();
     while (response[0] !== 'n' && response[0] !== 'y') {
       prompt('Please enter "y" or "n".');
