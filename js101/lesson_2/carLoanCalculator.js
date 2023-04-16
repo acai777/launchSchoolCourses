@@ -21,6 +21,8 @@ function carLoanCalculator() {
     let monthlyPaymt = loanAmount * (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
 
     console.log(`The monthly mortgage payment would be \$${monthlyPaymt.toFixed(2)}.`)
+
+    // Ask to continue. If response is no, break.
     prompt("Would you like to make another calculation?");
     let response = readline.question().toLowerCase(); 
     while (response[0] !== 'n' && response[0] !== 'y') {
@@ -47,8 +49,8 @@ function getLoan() {
   }
 
   loanAmount = loanAmount.replaceAll(',', ''); // account for commas
-  loanAmount = parseFloat(loanAmount.replaceAll(',', '')); // convert to Number type 
-  while (Number.isNaN(loanAmount)) {
+  loanAmount = parseFloat(loanAmount); // convert to Number type 
+  while (Number.isNaN(loanAmount)) { // validate is valid input
     prompt("It looks like you did not enter an input loan amount properly. Please try again.")
     loanAmount = parseFloat(readline.question());
   }
@@ -125,16 +127,12 @@ function getDuration() {
     }
 
     if (response === 'n') {
-      prompt("No worries. Let's restart the process.\n");
+      prompt("No worries. Let's try again.\n");
       return getDuration(); // prompts the user to restart the process. Recursive callback.
     } else {
       return loanDuration; 
     }
   }
-
-
-  
-  return loanDuration; 
 }
 
 // Run the script 
