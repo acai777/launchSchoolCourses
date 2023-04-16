@@ -1,7 +1,11 @@
+////////////////
 // Dependencies
+////////////////
 let readline = require('readline-sync');
 
+////////////////
 // Main calculator function
+////////////////
 function carLoanCalculator() {
   while (true) {
     let loanAmount = getLoan();
@@ -28,7 +32,9 @@ function carLoanCalculator() {
   }
 }
 
+////////////////
 // Helper functions
+////////////////
 function prompt(message) {
   console.log(`=> ${message}`);
 }
@@ -104,6 +110,8 @@ function getDuration() {
   }
 }
 
+////////////////
 // Running the script
+////////////////
 prompt("Welcome to your personal car loan calculator.\n\n=> To calculate your monthly payment, we need you to answer a few questions. Here they are:\n");
 carLoanCalculator();
