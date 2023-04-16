@@ -6,21 +6,32 @@
 
 let readline = require('readline-sync');
 function carLoanCalculator() {
+  while (true) {
+    // Loan amount
+    let loanAmount = getLoan();
 
-  // Loan amount
-  let loanAmount = getLoan();
+    // Annual percentage rate (APR)
+    let annualRate = getAPR(); 
+    let monthlyRate = (annualRate / 12) / 100; 
 
-  // Annual percentage rate (APR)
-  let annualRate = getAPR(); 
-  let monthlyRate = (annualRate / 12) / 100; 
+    // Loan duration
+    let loanDuration = getDuration(); 
 
-  // Loan duration
-  let loanDuration = getDuration(); 
+    // Compute the monthly mortgage.  
+    let monthlyPaymt = loanAmount * (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
 
-  // Compute the monthly mortgage.  
-  let monthlyPaymt = loanAmount * (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
+    console.log(`The monthly mortgage payment would be \$${monthlyPaymt.toFixed(2)}.`)
+    prompt("Would you like to make another calculation?");
+    let response = readline.question().toLowerCase(); 
+    while (response[0] !== 'n' && response[0] !== 'y') {
+      prompt('Please enter "y" or "n".');
+      response = readline.question().toLowerCase();
+    }
 
-  console.log(`The monthly mortgage payment would be \$${monthlyPaymt.toFixed(2)}.`)
+    if (response[0] === 'n') {
+      break;
+    }
+  }
 }
 
 // Helper functions
@@ -45,14 +56,14 @@ function getLoan() {
   // Verify with user the input is correct. 
   while (true) {
     prompt(`The loan amount you've specified is \$${loanAmount} dollars. Is this correct (y/n)?`);
-    let response = readline.question();
+    let response = readline.question().toLowerCase();
     
-    while (response.toLowerCase() !== 'y' && response.toLowerCase() !== 'n') {
+    while (response!== 'y' && response !== 'n') {
       prompt("Hmm...that is not a valid response. Please select either 'y' or 'n' and hit enter.");
-      response = readline.question();
+      response = readline.question().toLowerCase();
     }
 
-    if (response.toLowerCase() === 'n') {
+    if (response === 'n') {
       prompt("No worries. Let's restart the process.\n");
       return getLoan(); // prompts the user to restart the process. Recursive callback.
     } else {
@@ -78,14 +89,14 @@ function getAPR() {
   // Check with user the rate is what they inputted. 
   while (true) {
     prompt(`The annual percentage rate (APR) you've specified is ${rate}%. Is this correct (y/n)?`);
-    let response = readline.question();
+    let response = readline.question().toLowerCase();
     
-    while (response.toLowerCase() !== 'y' && response.toLowerCase() !== 'n') {
+    while (response !== 'y' && response !== 'n') {
       prompt("Hmm...that is not a valid response. Please select either 'y' or 'n' and hit enter.");
-      response = readline.question();
+      response = readline.question().toLowerCase();
     }
 
-    if (response.toLowerCase() === 'n') {
+    if (response === 'n') {
       prompt("Okay. Let's try again\n");
       return getAPR(); // prompts the user to restart the process. Recursive callback.
     } else {
@@ -106,14 +117,14 @@ function getDuration() {
   // Verify with user the input is correct. 
   while (true) {
     prompt(`The loan duration is: ${loanDuration} months. Is this correct (y/n)?`);
-    let response = readline.question();
+    let response = readline.question().toLowerCase();
     
-    while (response.toLowerCase() !== 'y' && response.toLowerCase() !== 'n') {
+    while (response !== 'y' && response!== 'n') {
       prompt("Hmm...that is not a valid response. Please select either 'y' or 'n' and hit enter.");
-      response = readline.question();
+      response = readline.question().toLowerCase();
     }
 
-    if (response.toLowerCase() === 'n') {
+    if (response === 'n') {
       prompt("No worries. Let's restart the process.\n");
       return getDuration(); // prompts the user to restart the process. Recursive callback.
     } else {
