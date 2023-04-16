@@ -22,14 +22,15 @@ function carLoanCalculator() {
     }
     console.log(`The monthly mortgage payment would be ${monthlyPaymt.toFixed(2)} dollars.`);
 
-    prompt("Would you like to make another calculation?"); // Ask to continue. If response is no, break.
+    prompt("Would you like to make another calculation? (y/n)"); // Ask to continue. If response is no, break.
     let response = readline.question().toLowerCase();
-    while (response[0] !== 'n' && response[0] !== 'y') {
+    while (response !== 'n' && response !== 'y') {
       prompt('Please enter "y" or "n".');
       response = readline.question().toLowerCase();
     }
     if (response[0] === 'n') break;
-  }
+    console.clear();
+  } 
 }
 
 ////////////////
@@ -63,7 +64,7 @@ function getLoan() {
 }
 
 function getAPR() {
-  prompt("What is your annual perentage rate? Please enter a number between 0 and 100 (%).");
+  prompt("What is your annual percentage rate? Please enter a number between 0 and 100 (%).");
   let rate = parseFloat(readline.question().replaceAll('%', ''));
   if (rate < 0 || rate >= 100 || Number.isNaN(rate)) {   // Verify is a valid rate
     prompt("You need to enter a number between 0 and 100. Please try again.\n");
@@ -113,5 +114,6 @@ function getDuration() {
 ////////////////
 // Running the script
 ////////////////
+console.clear(); 
 prompt("Welcome to your personal car loan calculator.\n\n=> To calculate your monthly payment, we need you to answer a few questions. Here they are:\n");
 carLoanCalculator();
