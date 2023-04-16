@@ -1,10 +1,7 @@
-// Wecome user to loan calculator
-// Ask for loan amount. Make sure is valid amount. If not, ask user to retype.
-// Ask for the annual interest rate.
-// Ask for loan duration in years. Can take estimates.
-// Compute and return the monthly payment.
-
+// Dependencies
 let readline = require('readline-sync');
+
+// Main calculator function
 function carLoanCalculator() {
   while (true) {
     let loanAmount = getLoan();
@@ -12,6 +9,7 @@ function carLoanCalculator() {
     let monthlyRate = (annualRate / 12) / 100;
     let loanDuration = getDuration();
     let monthlyPaymt;
+
     if (monthlyRate === 0) { // edge case for 0 interest rate.
       monthlyPaymt = loanAmount / loanDuration;
     } else {
@@ -19,16 +17,14 @@ function carLoanCalculator() {
         (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
     }
     console.log(`The monthly mortgage payment would be ${monthlyPaymt.toFixed(2)} dollars.`);
-    
-    prompt("Would you like to make another calculation?");     // Ask to continue. If response is no, break.
+
+    prompt("Would you like to make another calculation?"); // Ask to continue. If response is no, break.
     let response = readline.question().toLowerCase();
     while (response[0] !== 'n' && response[0] !== 'y') {
       prompt('Please enter "y" or "n".');
       response = readline.question().toLowerCase();
     }
-    if (response[0] === 'n') {
-      break;
-    }
+    if (response[0] === 'n') break;
   }
 }
 
@@ -108,6 +104,6 @@ function getDuration() {
   }
 }
 
-// Run the script
+// Running the script
 prompt("Welcome to your personal car loan calculator.\n\n=> To calculate your monthly payment, we need you to answer a few questions. Here they are:\n");
 carLoanCalculator();
