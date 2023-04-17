@@ -3,9 +3,9 @@
 ////////////////
 let readline = require('readline-sync');
 const INPUTS = [
-  ['loan amount', ' dollars'], 
+  ['loan amount', ' dollars'],
   ['annual percentage rate (APR)', '%'],
-  ['loan duration', ' months'], 
+  ['loan duration', ' months'],
 ];
 
 ////////////////
@@ -19,17 +19,17 @@ function carLoanCalculator() {
     let loanDuration = getDuration();
     let monthlyPaymt;
 
-    monthlyPaymt = calcMonthlyPaymt(loanAmount, monthlyRate, loanDuration)
+    monthlyPaymt = calcMonthlyPaymt(loanAmount, monthlyRate, loanDuration);
     console.log(`The monthly mortgage payment would be ${monthlyPaymt.toFixed(2)} dollars.`);
 
-    let again = playAgain(); 
+    let again = playAgain();
     if (!again) {
-      console.clear()
+      console.clear();
       console.log('Thank you for using our calculator!');
       break;
     }
     console.clear();
-  } 
+  }
 }
 
 ////////////////
@@ -55,14 +55,14 @@ function getLoan() {
   while (!valid(loanAmount)) {
     prompt("It looks like you did not enter an input loan amount properly. Please try again.");
     loanAmount = formatLoanDuration(readline.question());
-}
-
-    let response = verifyWithUser(loanAmount, 0);
-    if (response === 'n') {
-      return getLoan(); // prompts the user to restart the process. Recursive callback.
-    }
-    return loanAmount;
   }
+
+  let response = verifyWithUser(loanAmount, 0);
+  if (response === 'n') {
+    return getLoan(); // prompts the user to restart the process. Recursive callback.
+  }
+  return loanAmount;
+}
 
 function getAPR() {
   prompt("What is your annual percentage rate? Please enter a number between 0 and 100 (%).");
@@ -72,12 +72,12 @@ function getAPR() {
     rate = parseFloat(readline.question().replaceAll('%', ''));
   }
 
-  let response = verifyWithUser(rate, 1)
-    if (response === 'n') {
-      return getAPR(); // prompts the user to restart the process. Recursive callback.
-    }
-    return rate;
+  let response = verifyWithUser(rate, 1);
+  if (response === 'n') {
+    return getAPR(); // prompts the user to restart the process. Recursive callback.
   }
+  return rate;
+}
 
 function getDuration() {
   prompt("What is the loan duration in months? Please enter an integer.");
@@ -86,12 +86,12 @@ function getDuration() {
     prompt("Please enter a valid duration.");
     loanDuration = formatLoanDuration(readline.question());
   }
-    let response = verifyWithUser(loanDuration, 2)
-    if (response === 'n') {
-      return getDuration(); // prompts the user to restart the process. Recursive callback.
-    }
-    return loanDuration;
+  let response = verifyWithUser(loanDuration, 2);
+  if (response === 'n') {
+    return getDuration(); // prompts the user to restart the process. Recursive callback.
   }
+  return loanDuration;
+}
 
 function calcMonthlyPaymt(loanAmount, monthlyRate, loanDuration) {
   let monthlyPaymt;
@@ -101,7 +101,7 @@ function calcMonthlyPaymt(loanAmount, monthlyRate, loanDuration) {
     monthlyPaymt = loanAmount *
       (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
   }
-  return monthlyPaymt; 
+  return monthlyPaymt;
 }
 
 function playAgain() {
@@ -113,13 +113,13 @@ function playAgain() {
   }
 
   if (response === 'y') {
-    return true; 
+    return true;
   }
-  return false; 
+  return false;
 }
 
 function verifyWithUser(input, type) {
-  prompt(`The ${INPUTS[type][0]} is: ${input}${INPUTS[type][1]}. Is this correct (y/n)?`)
+  prompt(`The ${INPUTS[type][0]} is: ${input}${INPUTS[type][1]}. Is this correct (y/n)?`);
   let response = readline.question().toLowerCase();
 
   while (response !== 'y' && response !== 'n') {
@@ -127,12 +127,12 @@ function verifyWithUser(input, type) {
     response = readline.question().toLowerCase();
   }
 
-  return response; 
+  return response;
 }
 
 ////////////////
 // Running the script
 ////////////////
-console.clear(); 
+console.clear();
 prompt("Welcome to your personal car loan calculator.\n\n=> To calculate your monthly payment, we need you to answer a few questions. Here they are:\n");
 carLoanCalculator();
