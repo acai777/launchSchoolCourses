@@ -40,13 +40,23 @@ function prompt(message) {
   console.log(`=> ${message}`);
 }
 
+function formatLoanDuration(input) {
+  const strippedInput = input.trimStart().replaceAll(',', '').replaceAll('$', '');
+  return parseFloat(strippedInput);
+}
+
+function valid(amount) { // will work for loan amount and duration. Not for interest (allow 0 interest)
+  const isAPosNumber = (!Number.isNaN(amount)) && amount > 0;
+  return isAPosNumber;
+}
+
 function getLoan() {
   prompt("First, what is the loan amount? ");
-  let loanAmount = parseFloat(readline.question().trimStart().replaceAll(',', '').replaceAll('$', ''));
-  while (Number.isNaN(loanAmount)) {
+  let loanAmount = formatLoanDuration(readline.question());
+  while (!valid(loanAmount)) {
     prompt("It looks like you did not enter an input loan amount properly. Please try again.");
-    loanAmount = parseFloat(readline.question().trimStart().replaceAll(',', '').replaceAll('$', ''));
-  }
+    loanAmount = formatLoanDuration(readline.question());
+}
 
   while (true) {  // Verify with user the input is correct.
     prompt(`The loan amount you've specified is ${loanAmount} dollars. Is this correct (y/n)?`);
@@ -66,9 +76,9 @@ function getLoan() {
 function getAPR() {
   prompt("What is your annual percentage rate? Please enter a number between 0 and 100 (%).");
   let rate = parseFloat(readline.question().replaceAll('%', ''));
-  if (rate < 0 || rate >= 100 || Number.isNaN(rate)) {   // Verify is a valid rate
-    prompt("You need to enter a number between 0 and 100. Please try again.\n");
-    return getAPR();
+  while (rate < 0 || rate >= 100 || Number.isNaN(rate)) {   // Verify is a valid rate
+    prompt("You need to enter a number between 0 and 100. Please try again.");
+    rate = parseFloat(readline.question().replaceAll('%', ''));
   }
 
   while (true) { // Check with user the rate is what they inputted.
@@ -89,10 +99,10 @@ function getAPR() {
 
 function getDuration() {
   prompt("What is the loan duration in months? Please enter an integer.");
-  let loanDuration = readline.question();
-  while ((Number.isNaN(parseInt(loanDuration, 10)))) {
+  let loanDuration = formatLoanDuration(readline.question());
+  while (!valid(loanDuration)) {
     prompt("Please enter a valid duration.");
-    loanDuration = readline.question();
+    loanDuration = formatLoanDuration(readline.question());
   }
 
   while (true) { // Verify with user the input is correct.
