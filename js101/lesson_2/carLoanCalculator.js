@@ -14,21 +14,15 @@ function carLoanCalculator() {
     let loanDuration = getDuration();
     let monthlyPaymt;
 
-    if (monthlyRate === 0) { // edge case for 0 interest rate.
-      monthlyPaymt = loanAmount / loanDuration;
-    } else {
-      monthlyPaymt = loanAmount *
-        (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
-    }
+    monthlyPaymt = calcMonthlyPaymt(loanAmount, monthlyRate, loanDuration)
     console.log(`The monthly mortgage payment would be ${monthlyPaymt.toFixed(2)} dollars.`);
 
-    prompt("Would you like to make another calculation? (y/n)"); // Ask to continue. If response is no, break.
-    let response = readline.question().toLowerCase();
-    while (response !== 'n' && response !== 'y') {
-      prompt('Please enter "y" or "n".');
-      response = readline.question().toLowerCase();
+    let again = playAgain(); 
+    if (!again) {
+      console.clear()
+      console.log('Thank you for using our calculator!');
+      break;
     }
-    if (response[0] === 'n') break;
     console.clear();
   } 
 }
@@ -119,6 +113,31 @@ function getDuration() {
     }
     return loanDuration;
   }
+}
+
+function calcMonthlyPaymt(loanAmount, monthlyRate, loanDuration) {
+  let monthlyPaymt;
+  if (monthlyRate === 0) { // edge case for 0 interest rate.
+    monthlyPaymt = loanAmount / loanDuration;
+  } else {
+    monthlyPaymt = loanAmount *
+      (monthlyRate / (1 - Math.pow((1 + monthlyRate), (-loanDuration))));
+  }
+  return monthlyPaymt; 
+}
+
+function playAgain() {
+  prompt("Would you like to make another calculation? (y/n)"); // Ask to continue. If response is no, break.
+  let response = readline.question().toLowerCase();
+  while (response !== 'n' && response !== 'y') {
+    prompt('Please enter "y" or "n".');
+    response = readline.question().toLowerCase();
+  }
+
+  if (response === 'y') {
+    return true; 
+  }
+  return false; 
 }
 
 ////////////////
