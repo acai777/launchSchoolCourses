@@ -1,7 +1,12 @@
 ////////////////
-// Dependencies
+// Dependencies and constants
 ////////////////
 let readline = require('readline-sync');
+const INPUTS = [
+  ['loan amount', ' dollars'], 
+  ['annual percentage rate (APR)', '%'],
+  ['loan duration', ' months'], 
+];
 
 ////////////////
 // Main calculator function
@@ -52,20 +57,12 @@ function getLoan() {
     loanAmount = formatLoanDuration(readline.question());
 }
 
-  while (true) {  // Verify with user the input is correct.
-    prompt(`The loan amount you've specified is ${loanAmount} dollars. Is this correct (y/n)?`);
-    let response = readline.question().toLowerCase();
-
-    while (response !== 'y' && response !== 'n') {
-      prompt("Hmm...that is not a valid response. Please select either 'y' or 'n' and hit enter.");
-      response = readline.question().toLowerCase();
-    }
+    let response = verifyWithUser(loanAmount, 0);
     if (response === 'n') {
       return getLoan(); // prompts the user to restart the process. Recursive callback.
     }
     return loanAmount;
   }
-}
 
 function getAPR() {
   prompt("What is your annual percentage rate? Please enter a number between 0 and 100 (%).");
@@ -75,21 +72,12 @@ function getAPR() {
     rate = parseFloat(readline.question().replaceAll('%', ''));
   }
 
-  while (true) { // Check with user the rate is what they inputted.
-    prompt(`The annual percentage rate (APR) you've specified is ${rate}%. Is this correct (y/n)?`);
-    let response = readline.question().toLowerCase();
-
-    while (response !== 'y' && response !== 'n') {
-      prompt("Hmm...that is not a valid response. Please select either 'y' or 'n' and hit enter.");
-      response = readline.question().toLowerCase();
-    }
-
+  let response = verifyWithUser(rate, 1)
     if (response === 'n') {
       return getAPR(); // prompts the user to restart the process. Recursive callback.
     }
     return rate;
   }
-}
 
 function getDuration() {
   prompt("What is the loan duration in months? Please enter an integer.");
@@ -138,6 +126,18 @@ function playAgain() {
     return true; 
   }
   return false; 
+}
+
+function verifyWithUser(input, type) {
+  prompt(`The ${INPUTS[type][0]} is: ${input}${INPUTS[type][1]}. Is this correct (y/n)?`)
+  let response = readline.question().toLowerCase();
+
+  while (response !== 'y' && response !== 'n') {
+    prompt("Hmm...that is not a valid response. Please select either 'y' or 'n' and hit enter.");
+    response = readline.question().toLowerCase();
+  }
+
+  return response; 
 }
 
 ////////////////
