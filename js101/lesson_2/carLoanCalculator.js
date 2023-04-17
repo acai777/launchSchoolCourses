@@ -86,22 +86,12 @@ function getDuration() {
     prompt("Please enter a valid duration.");
     loanDuration = formatLoanDuration(readline.question());
   }
-
-  while (true) { // Verify with user the input is correct.
-    prompt(`The loan duration is: ${loanDuration} months. Is this correct (y/n)?`);
-    let response = readline.question().toLowerCase();
-
-    while (response !== 'y' && response !== 'n') {
-      prompt("Hmm...that is not a valid response. Please select either 'y' or 'n' and hit enter.");
-      response = readline.question().toLowerCase();
-    }
-
+    let response = verifyWithUser(loanDuration, 2)
     if (response === 'n') {
       return getDuration(); // prompts the user to restart the process. Recursive callback.
     }
     return loanDuration;
   }
-}
 
 function calcMonthlyPaymt(loanAmount, monthlyRate, loanDuration) {
   let monthlyPaymt;
