@@ -42,7 +42,7 @@ END
 
 let names = ['kim', 'joe', 'sam'];
 names.forEach((_, index) => {
-  console.log(`${index + 1}: got a name!`);
+  console.log(`${index + 1}: got a name! ~`);
 });
 
 // logs
