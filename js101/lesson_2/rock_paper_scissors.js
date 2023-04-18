@@ -2,7 +2,21 @@
 // Dependencies, constants, and initial variables
 ////////////////////////////////////////////////
 const readline = require('readline-sync');
-const VALID_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
+const VALID_CHOICES_USER = ['rock (r)', 'paper (p)', 'scissors (sc)', 'spock (sp)', 'lizard (l)'];
+const VALID_CHOICES_COMPUTER = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
+const POSSIBLE_USER_INPUT = ['rock', 'paper', 'scissors', 'spock', 'lizard', 'r', 'p', 'sc', 'sp', 'l']; 
+const USER_INPUT_TO_VALID_FORM = {
+  rock: 'rock',
+  paper: 'paper',
+  scissors: 'scissors', 
+  lizard: 'lizard', 
+  spock: 'spock', 
+  r: 'rock', 
+  p: 'paper', 
+  sc: 'scissors', 
+  sp: 'spock', 
+  l: 'lizard',
+};
 const RULES = [
   'Scissors cut paper',
   'Paper covers rock',
@@ -19,6 +33,7 @@ const WINNING_SCORE = 3;
 let ownScore = 0;
 let computerScore = 0;
 let roundWinner;
+let again; 
 
 ////////////////
 // Main calculator function
@@ -36,7 +51,7 @@ function playRPSEnhanced() {
 
     if (ownScore === WINNING_SCORE || computerScore === WINNING_SCORE) break;
 
-    let again = playAgain();
+    again = playAgain();
     if (!again) {
       console.clear();
       console.log('Thank you for playing!');
@@ -44,7 +59,8 @@ function playRPSEnhanced() {
     }
   }
 
-  displayOverallWinner(); // will only exit the while loop if have a winner.
+  displayOverallWinner(); 
+
 }
 
 ////////////////
@@ -55,7 +71,7 @@ function prompt(message) {
 }
 
 function winner(choice, computerChoice) {
-  prompt(`You choice ${choice}, the computer chose ${computerChoice}.`);
+  prompt(`You chose ${choice}, the computer chose ${computerChoice}.`);
   if (playerWins(choice, computerChoice)) {
     return 'ownWin';
   } else if (choice === computerChoice) {
@@ -79,10 +95,10 @@ function updateScore(roundWinner) {
 function displayRoundWinner(roundWinner) {
   switch (roundWinner) {
     case 'ownWin':
-      prompt("You won!");
+      prompt("You won this round.");
       break;
     case 'computerWin':
-      prompt("The Computer won!");
+      prompt("The Computer won this round.");
       break;
     case 'tie':
       prompt("It's a tie!");
@@ -107,11 +123,11 @@ function playAgain() {
 }
 
 function displayOverallWinner() {
-  if (ownScore === WINNING_SCORE) {
+  if (ownScore === WINNING_SCORE && again) {
     prompt(`You won the best of five! Good job!`);
-  } else {
+  } else if (computerScore === WINNING_SCORE && again) {
     prompt(`The computer won the best of five!`);
-  }
+  } 
 }
 function welcomeMsg() {
   console.clear();
@@ -126,18 +142,18 @@ function welcomeMsg() {
 }
 
 function ownRoundChoice() {
-  prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
-  let ownChoice = readline.question();
-  while (!VALID_CHOICES.includes(ownChoice)) {
+  prompt(`Choose one: ${VALID_CHOICES_USER.join(', ')}`);
+  let userInput = readline.question();
+  while (!POSSIBLE_USER_INPUT.includes(userInput)) {
     prompt('That is not a valid choice. Please try again.');
-    ownChoice = readline.question();
+    userInput = readline.question();
   }
-  return ownChoice;
+  return USER_INPUT_TO_VALID_FORM[userInput];
 }
 
 function computerRoundChoice() {
-  let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
-  let computerChoice = VALID_CHOICES[randomIndex];
+  let randomIndex = Math.floor(Math.random() * VALID_CHOICES_COMPUTER.length);
+  let computerChoice = VALID_CHOICES_COMPUTER[randomIndex];
   return computerChoice;
 }
 
