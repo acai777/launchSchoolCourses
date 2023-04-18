@@ -4,17 +4,17 @@
 const readline = require('readline-sync');
 const VALID_CHOICES_USER = ['rock (r)', 'paper (p)', 'scissors (sc)', 'spock (sp)', 'lizard (l)'];
 const VALID_CHOICES_COMPUTER = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
-const POSSIBLE_USER_INPUT = ['rock', 'paper', 'scissors', 'spock', 'lizard', 'r', 'p', 'sc', 'sp', 'l']; 
+const POSSIBLE_USER_INPUT = ['rock', 'paper', 'scissors', 'spock', 'lizard', 'r', 'p', 'sc', 'sp', 'l'];
 const USER_INPUT_TO_VALID_FORM = {
   rock: 'rock',
   paper: 'paper',
-  scissors: 'scissors', 
-  lizard: 'lizard', 
-  spock: 'spock', 
-  r: 'rock', 
-  p: 'paper', 
-  sc: 'scissors', 
-  sp: 'spock', 
+  scissors: 'scissors',
+  lizard: 'lizard',
+  spock: 'spock',
+  r: 'rock',
+  p: 'paper',
+  sc: 'scissors',
+  sp: 'spock',
   l: 'lizard',
 };
 const RULES = [
@@ -33,7 +33,7 @@ const WINNING_SCORE = 3;
 let ownScore = 0;
 let computerScore = 0;
 let roundWinner;
-let again; 
+let again;
 
 ////////////////
 // Main calculator function
@@ -59,7 +59,7 @@ function playRPSEnhanced() {
     }
   }
 
-  displayOverallWinner(); 
+  displayOverallWinner();
 
 }
 
@@ -127,7 +127,7 @@ function displayOverallWinner() {
     prompt(`You won the best of five! Good job!`);
   } else if (computerScore === WINNING_SCORE && again) {
     prompt(`The computer won the best of five!`);
-  } 
+  }
 }
 function welcomeMsg() {
   console.clear();
