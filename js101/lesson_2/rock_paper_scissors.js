@@ -35,18 +35,21 @@ while (ownScore < WINNING_SCORE && computerScore < WINNING_SCORE) {
 
   roundWinner = winner(choice, computerChoice);
   updateScore(roundWinner); 
-  displayWinner(roundWinner); 
+  displayRoundWinner(roundWinner); 
 
-  prompt(`Would you like to play again? (y/n)`);
-  let answer = readline.question().toLowerCase(); 
-  while (answer !== 'y' && answer !== 'n') {
-    prompt(`Please enter a valid response; please enter 'y' or 'n'`);
-    answer = readline.question().toLowerCase(); 
+  let again = playAgain();
+  if (!again) {
+    console.clear();
+    console.log('Thank you for playing!');
+    break;
   }
-
-  if (answer !== 'y') break;
 }
 
+displayOverallWinner(); // will only exit the while loop if have a winner.
+
+////////////////
+// Helper functions
+////////////////
 function winner(choice, computerChoice) {
   prompt(`You choice ${choice}, the computer chose ${computerChoice}.`);
   if ((choice === 'scissors' && computerChoice === 'paper') ||
@@ -87,7 +90,7 @@ function updateScore(roundWinner) {
   }
 }
 
-function displayWinner(roundWinner) {
+function displayRoundWinner(roundWinner) {
   switch (roundWinner) {
     case 'ownWin':
       prompt("You won!");
@@ -103,6 +106,27 @@ function displayWinner(roundWinner) {
   console.log(`         Your score: ${ownScore}\n     Computer score: ${computerScore}`);
 }
 
+function playAgain() {
+  prompt("Would you like to play again? (y/n)"); // Ask to continue. If response is no, break.
+  let response = readline.question().toLowerCase();
+  while (response !== 'n' && response !== 'y') {
+    prompt('Please enter "y" or "n".');
+    response = readline.question().toLowerCase();
+  }
+
+  if (response === 'y') {
+    return true;
+  }
+  return false;
+}
+
+function displayOverallWinner() {
+  if (ownScore === WINNING_SCORE) {
+    prompt(`You won the best of five! Good job!`);
+  } else {
+    prompt(`The computer won the best of five!`);
+  }
+}
 function welcomeMsg() {
   console.clear();
 
