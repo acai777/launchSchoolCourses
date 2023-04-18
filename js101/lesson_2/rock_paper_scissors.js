@@ -25,7 +25,7 @@ let roundWinner;
 ////////////////
 function playRPSEnhanced() {
   welcomeMsg();
-  while (ownScore < WINNING_SCORE && computerScore < WINNING_SCORE) {
+  while (true) {
 
     let ownChoice = ownRoundChoice(); 
     let computerChoice = computerRoundChoice(); 
@@ -34,6 +34,8 @@ function playRPSEnhanced() {
     updateScore(roundWinner);
     displayRoundWinner(roundWinner);
 
+    if (ownScore === WINNING_SCORE || computerScore === WINNING_SCORE) break; 
+    
     let again = playAgain();
     if (!again) {
       console.clear();
