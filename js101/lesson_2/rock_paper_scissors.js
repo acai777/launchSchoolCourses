@@ -27,15 +27,15 @@ function playRPSEnhanced() {
   welcomeMsg();
   while (true) {
 
-    let ownChoice = ownRoundChoice(); 
-    let computerChoice = computerRoundChoice(); 
+    let ownChoice = ownRoundChoice();
+    let computerChoice = computerRoundChoice();
 
     roundWinner = winner(ownChoice, computerChoice);
     updateScore(roundWinner);
     displayRoundWinner(roundWinner);
 
-    if (ownScore === WINNING_SCORE || computerScore === WINNING_SCORE) break; 
-    
+    if (ownScore === WINNING_SCORE || computerScore === WINNING_SCORE) break;
+
     let again = playAgain();
     if (!again) {
       console.clear();
@@ -56,30 +56,12 @@ function prompt(message) {
 
 function winner(choice, computerChoice) {
   prompt(`You choice ${choice}, the computer chose ${computerChoice}.`);
-  if ((choice === 'scissors' && computerChoice === 'paper') ||
-      (choice === 'paper' && computerChoice === 'rock') ||
-      (choice === 'rock' && computerChoice === 'lizard') ||
-      (choice === 'lizard' && computerChoice === 'spock') ||
-      (choice === 'spock' && computerChoice === 'scissors') ||
-      (choice === 'scissors' && computerChoice === 'lizard') ||
-      (choice === 'paper' && computerChoice === 'spock') ||
-      (choice === 'rock' && computerChoice === 'scissors') ||
-      (choice === 'lizard' && computerChoice === 'paper') ||
-      (choice === 'spock' && computerChoice === 'rock')) {
+  if (playerWins(choice, computerChoice)) {
     return 'ownWin';
-  } else if ((computerChoice === 'scissors' && choice === 'paper') ||
-      (computerChoice === 'paper' && choice === 'rock') ||
-      (computerChoice === 'rock' && choice === 'lizard') ||
-      (computerChoice === 'lizard' && choice === 'spock') ||
-      (computerChoice === 'spock' && choice === 'scissors') ||
-      (computerChoice === 'scissors' && choice === 'lizard') ||
-      (computerChoice === 'paper' && choice === 'spock') ||
-      (computerChoice === 'rock' && choice === 'scissors') ||
-      (computerChoice === 'lizard' && choice === 'paper') ||
-      (computerChoice === 'spock' && choice === 'rock')) {
-    return 'computerWin';
-  } else {
+  } else if (choice === computerChoice) {
     return 'tie';
+  } else {
+    return 'computerWin';
   }
 }
 
@@ -157,6 +139,19 @@ function computerRoundChoice() {
   let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
   let computerChoice = VALID_CHOICES[randomIndex];
   return computerChoice;
+}
+
+function playerWins(choice, computerChoice) {
+  return (choice === 'rock' && computerChoice === 'scissors') ||
+         (choice === 'rock' && computerChoice === 'lizard') ||
+         (choice === 'paper' && computerChoice === 'rock') ||
+         (choice === 'paper' && computerChoice === 'spock') ||
+         (choice === 'scissors' && computerChoice === 'paper') ||
+         (choice === 'scissors' && computerChoice === 'lizard') ||
+         (choice === 'lizard' && computerChoice === 'paper') ||
+         (choice === 'lizard' && computerChoice === 'spock') ||
+         (choice === 'spock' && computerChoice === 'rock') ||
+         (choice === 'spock' && computerChoice === 'scissors');
 }
 
 ////////////////
