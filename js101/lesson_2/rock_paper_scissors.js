@@ -12,14 +12,17 @@ const RULES = [
   'Spock vaporizes rock',
   'Rock breaks scissors',
 ]
-const NUMBER_RULES = 10; 
+const WINNING_SCORE = 3; 
 
 function prompt(message) {
   console.log(`=> ${message}`);
 }
 
+let ownScore = 0;
+let computerScore = 0; 
+let roundWinner; 
 welcomeMsg();
-while (true) {
+while (ownScore < WINNING_SCORE && computerScore < WINNING_SCORE) {
   prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
   let choice = readline.question(); 
   while (!VALID_CHOICES.includes(choice)) {
@@ -30,7 +33,9 @@ while (true) {
   let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
   let computerChoice = VALID_CHOICES[randomIndex];
 
-  displayWinner(choice, computerChoice);
+  roundWinner = winner(choice, computerChoice);
+  updateScore(roundWinner); 
+  displayWinner(roundWinner); 
 
   prompt(`Would you like to play again? (y/n)`);
   let answer = readline.question().toLowerCase(); 
@@ -42,7 +47,7 @@ while (true) {
   if (answer !== 'y') break;
 }
 
-function displayWinner(choice, computerChoice) {
+function winner(choice, computerChoice) {
   prompt(`You choice ${choice}, the computer chose ${computerChoice}.`);
   if ((choice === 'scissors' && computerChoice === 'paper') ||
       (choice === 'paper' && computerChoice === 'rock') ||
@@ -54,7 +59,7 @@ function displayWinner(choice, computerChoice) {
       (choice === 'rock' && computerChoice === 'scissors') ||
       (choice === 'lizard' && computerChoice === 'paper') ||
       (choice === 'spock' && computerChoice === 'rock')) {
-    prompt(`You won!`);
+    return 'ownWin';
   } else if ((computerChoice === 'scissors' && choice === 'paper') ||
       (computerChoice === 'paper' && choice === 'rock') ||
       (computerChoice === 'rock' && choice === 'lizard') ||
@@ -65,17 +70,44 @@ function displayWinner(choice, computerChoice) {
       (computerChoice === 'rock' && choice === 'scissors') ||
       (computerChoice === 'lizard' && choice === 'paper') ||
       (computerChoice === 'spock' && choice === 'rock')) {
-        prompt(`Computer won!`);
+    return 'computerWin';
   } else {
-    prompt(`It's a tie!`);
+    return 'tie';
   }
+}
+
+function updateScore(roundWinner) {
+  switch (roundWinner) {
+    case 'ownWin':
+      ownScore += 1; 
+      break;
+    case 'computerWin': 
+      computerScore += 1; 
+      break;
+  }
+}
+
+function displayWinner(roundWinner) {
+  switch (roundWinner) {
+    case 'ownWin':
+      prompt("You won!");
+      break;
+    case 'computerWin': 
+      prompt("The Computer won!");
+      break;
+    case 'tie':
+      prompt("It's a tie!");
+      break;
+  }
+
+  console.log(`         Your score: ${ownScore}\n     Computer score: ${computerScore}`);
 }
 
 function welcomeMsg() {
   console.clear();
 
   prompt(`Welcome to Rock Paper Scissors Lizard Spock!`)
-  prompt(`This is a game where you must play against the computer in a best of five game`);
+  prompt(`Play against the computer and try win in a best of five game.`);
   prompt(`You might be wondering which gesture beats what. Here are the possibilities:\n`)
   RULES.forEach(rule => console.log(`     ${rule}`));
   
