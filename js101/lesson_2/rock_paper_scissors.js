@@ -1,3 +1,6 @@
+////////////////
+// Dependencies and constants
+////////////////
 const readline = require('readline-sync');
 const VALID_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard']
 const RULES = [
@@ -14,42 +17,44 @@ const RULES = [
 ]
 const WINNING_SCORE = 3; 
 
-function prompt(message) {
-  console.log(`=> ${message}`);
-}
+////////////////
+// Main calculator function
+////////////////
+function playRPSEnhanced() {
+  welcomeMsg();
+  while (ownScore < WINNING_SCORE && computerScore < WINNING_SCORE) {
+    prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
+    let choice = readline.question(); 
+    while (!VALID_CHOICES.includes(choice)) {
+      prompt('That is not a valid choice. Please try again.');
+      choice = readline.question();
+    }
 
-let ownScore = 0;
-let computerScore = 0; 
-let roundWinner; 
-welcomeMsg();
-while (ownScore < WINNING_SCORE && computerScore < WINNING_SCORE) {
-  prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
-  let choice = readline.question(); 
-  while (!VALID_CHOICES.includes(choice)) {
-    prompt('That is not a valid choice. Please try again.');
-    choice = readline.question();
+    let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
+    let computerChoice = VALID_CHOICES[randomIndex];
+
+    roundWinner = winner(choice, computerChoice);
+    updateScore(roundWinner); 
+    displayRoundWinner(roundWinner); 
+
+    let again = playAgain();
+    if (!again) {
+      console.clear();
+      console.log('Thank you for playing!');
+      break;
+    }
   }
 
-  let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
-  let computerChoice = VALID_CHOICES[randomIndex];
-
-  roundWinner = winner(choice, computerChoice);
-  updateScore(roundWinner); 
-  displayRoundWinner(roundWinner); 
-
-  let again = playAgain();
-  if (!again) {
-    console.clear();
-    console.log('Thank you for playing!');
-    break;
-  }
+  displayOverallWinner(); // will only exit the while loop if have a winner.
 }
-
-displayOverallWinner(); // will only exit the while loop if have a winner.
 
 ////////////////
 // Helper functions
 ////////////////
+function prompt(message) {
+  console.log(`=> ${message}`);
+}
+
 function winner(choice, computerChoice) {
   prompt(`You choice ${choice}, the computer chose ${computerChoice}.`);
   if ((choice === 'scissors' && computerChoice === 'paper') ||
@@ -139,5 +144,10 @@ function welcomeMsg() {
   prompt(`Let's get started.`);
 }
 
-
-
+////////////////
+// Running the script
+////////////////
+let ownScore = 0;
+let computerScore = 0; 
+let roundWinner; 
+playRPSEnhanced();
