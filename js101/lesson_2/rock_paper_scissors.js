@@ -144,9 +144,9 @@ function welcomeMsg() {
 function ownRoundChoice() {
   prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
   let ownChoice = readline.question();
-  while (!VALID_CHOICES.includes(choice)) {
+  while (!VALID_CHOICES.includes(ownChoice)) {
     prompt('That is not a valid choice. Please try again.');
-    choice = readline.question();
+    ownChoice = readline.question();
   }
   return ownChoice;
 }
