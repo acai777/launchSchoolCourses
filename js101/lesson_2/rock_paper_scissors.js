@@ -36,7 +36,7 @@ let roundWinner;
 let again;
 
 ////////////////
-// Main calculator function
+// Main function
 ////////////////
 function playRPSEnhanced() {
   welcomeMsg();
