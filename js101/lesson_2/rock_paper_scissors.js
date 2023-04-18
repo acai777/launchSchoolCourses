@@ -1,8 +1,8 @@
-////////////////
-// Dependencies and constants
-////////////////
+////////////////////////////////////////////////
+// Dependencies, constants, and initial variables
+////////////////////////////////////////////////
 const readline = require('readline-sync');
-const VALID_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard']
+const VALID_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
 const RULES = [
   'Scissors cut paper',
   'Paper covers rock',
@@ -14,8 +14,11 @@ const RULES = [
   'Paper disproves Spock',
   'Spock vaporizes rock',
   'Rock breaks scissors',
-]
-const WINNING_SCORE = 3; 
+];
+const WINNING_SCORE = 3;
+let ownScore = 0;
+let computerScore = 0;
+let roundWinner;
 
 ////////////////
 // Main calculator function
@@ -23,19 +26,13 @@ const WINNING_SCORE = 3;
 function playRPSEnhanced() {
   welcomeMsg();
   while (ownScore < WINNING_SCORE && computerScore < WINNING_SCORE) {
-    prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
-    let choice = readline.question(); 
-    while (!VALID_CHOICES.includes(choice)) {
-      prompt('That is not a valid choice. Please try again.');
-      choice = readline.question();
-    }
 
-    let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
-    let computerChoice = VALID_CHOICES[randomIndex];
+    let ownChoice = ownRoundChoice(); 
+    let computerChoice = computerRoundChoice(); 
 
-    roundWinner = winner(choice, computerChoice);
-    updateScore(roundWinner); 
-    displayRoundWinner(roundWinner); 
+    roundWinner = winner(ownChoice, computerChoice);
+    updateScore(roundWinner);
+    displayRoundWinner(roundWinner);
 
     let again = playAgain();
     if (!again) {
@@ -87,10 +84,10 @@ function winner(choice, computerChoice) {
 function updateScore(roundWinner) {
   switch (roundWinner) {
     case 'ownWin':
-      ownScore += 1; 
+      ownScore += 1;
       break;
-    case 'computerWin': 
-      computerScore += 1; 
+    case 'computerWin':
+      computerScore += 1;
       break;
   }
 }
@@ -100,7 +97,7 @@ function displayRoundWinner(roundWinner) {
     case 'ownWin':
       prompt("You won!");
       break;
-    case 'computerWin': 
+    case 'computerWin':
       prompt("The Computer won!");
       break;
     case 'tie':
@@ -135,19 +132,32 @@ function displayOverallWinner() {
 function welcomeMsg() {
   console.clear();
 
-  prompt(`Welcome to Rock Paper Scissors Lizard Spock!`)
+  prompt(`Welcome to Rock Paper Scissors Lizard Spock!`);
   prompt(`Play against the computer and try win in a best of five game.`);
-  prompt(`You might be wondering which gesture beats what. Here are the possibilities:\n`)
+  prompt(`You might be wondering which gesture beats what. Here are the possibilities:\n`);
   RULES.forEach(rule => console.log(`     ${rule}`));
-  
-  console.log(); 
+
+  console.log();
   prompt(`Let's get started.`);
+}
+
+function ownRoundChoice() {
+  prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
+  let ownChoice = readline.question();
+  while (!VALID_CHOICES.includes(choice)) {
+    prompt('That is not a valid choice. Please try again.');
+    choice = readline.question();
+  }
+  return ownChoice;
+}
+
+function computerRoundChoice() {
+  let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
+  let computerChoice = VALID_CHOICES[randomIndex];
+  return computerChoice;
 }
 
 ////////////////
 // Running the script
 ////////////////
-let ownScore = 0;
-let computerScore = 0; 
-let roundWinner; 
 playRPSEnhanced();
