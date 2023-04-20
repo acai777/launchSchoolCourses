@@ -5,6 +5,7 @@ const readline = require('readline-sync');
 const VALID_CHOICES_USER = ['rock (r)', 'paper (p)', 'scissors (sc)', 'spock (sp)', 'lizard (l)'];
 const VALID_CHOICES_COMPUTER = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
 const POSSIBLE_USER_INPUT = ['rock', 'paper', 'scissors', 'spock', 'lizard', 'r', 'p', 'sc', 'sp', 'l'];
+
 const USER_INPUT_TO_VALID_FORM = {
   rock: 'rock',
   paper: 'paper',
@@ -17,6 +18,7 @@ const USER_INPUT_TO_VALID_FORM = {
   sp: 'spock',
   l: 'lizard',
 };
+
 const RULES = [
   'Scissors cut paper',
   'Paper covers rock',
@@ -29,7 +31,12 @@ const RULES = [
   'Spock vaporizes rock',
   'Rock breaks scissors',
 ];
+
 const WINNING_SCORE = 3;
+const RESULTS = ['ownWin', 'computerWin', 'tie'];
+const PLAYER_WIN_INDEX = 0; 
+const COMPUTER_WIN_INDEX = 1;
+const TIE_INDEX = 2; 
 let ownScore = 0;
 let computerScore = 0;
 let roundWinner;
@@ -74,20 +81,20 @@ function prompt(message) {
 function winner(choice, computerChoice) {
   prompt(`You chose ${choice}, the computer chose ${computerChoice}.`);
   if (playerWins(choice, computerChoice)) {
-    return 'ownWin';
+    return RESULTS[PLAYER_WIN_INDEX];
   } else if (choice === computerChoice) {
-    return 'tie';
+    return RESULTS[COMPUTER_WIN_INDEX];
   } else {
-    return 'computerWin';
+    return RESULTS[TIE_INDEX];
   }
 }
 
 function updateScore(roundWinner) {
   switch (roundWinner) {
-    case 'ownWin':
+    case RESULTS[PLAYER_WIN_INDEX]:
       ownScore += 1;
       break;
-    case 'computerWin':
+    case RESULTS[COMPUTER_WIN_INDEX]:
       computerScore += 1;
       break;
   }
@@ -95,13 +102,13 @@ function updateScore(roundWinner) {
 
 function displayRoundWinner(roundWinner) {
   switch (roundWinner) {
-    case 'ownWin':
+    case RESULTS[PLAYER_WIN_INDEX]:
       prompt("You won this round.");
       break;
-    case 'computerWin':
+    case RESULTS[COMPUTER_WIN_INDEX]:
       prompt("The Computer won this round.");
       break;
-    case 'tie':
+    case RESULTS[TIE_INDEX]:
       prompt("It's a tie!");
       break;
   }
