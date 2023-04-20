@@ -51,15 +51,17 @@ function playRPSEnhanced() {
 
     if (ownScore === WINNING_SCORE || computerScore === WINNING_SCORE) break;
 
-    again = playAgain();
-    if (!again) {
-      console.clear();
-      console.log('Thank you for playing!');
-      break;
-    }
+    keepGoing(); 
   }
 
   displayOverallWinner();
+  again = playAgain();
+  if (!again) {
+    exitGameMsg(); 
+  } else {
+    resetTally();
+    playRPSEnhanced();
+  }
 }
 
 ////////////////
@@ -110,21 +112,21 @@ function displayRoundWinner(roundWinner) {
 function playAgain() {
   prompt("Would you like to play again? (y/n)"); // Ask to continue. If response is no, break.
   let response = readline.question().toLowerCase();
-  while (response !== 'n' && response !== 'y') {
+  while (response !== 'n' && response !== 'y' && response !== 'no' && response !== 'yes') {
     prompt('Please enter "y" or "n".');
     response = readline.question().toLowerCase();
   }
 
-  if (response === 'y') {
+  if (response === 'y' || response === 'yes') {
     return true;
   }
   return false;
 }
 
 function displayOverallWinner() {
-  if (ownScore === WINNING_SCORE && again) {
+  if (ownScore === WINNING_SCORE) {
     prompt(`You won the best of five! Good job!`);
-  } else if (computerScore === WINNING_SCORE && again) {
+  } else if (computerScore === WINNING_SCORE) {
     prompt(`The computer won the best of five!`);
   }
 }
@@ -142,7 +144,7 @@ function welcomeMsg() {
 
 function ownRoundChoice() {
   prompt(`Choose one: ${VALID_CHOICES_USER.join(', ')}`);
-  let userInput = readline.question();
+  let userInput = readline.question().toLowerCase();
   while (!POSSIBLE_USER_INPUT.includes(userInput)) {
     prompt('That is not a valid choice. Please try again.');
     userInput = readline.question();
@@ -167,6 +169,21 @@ function playerWins(choice, computerChoice) {
          (choice === 'lizard' && computerChoice === 'spock') ||
          (choice === 'spock' && computerChoice === 'rock') ||
          (choice === 'spock' && computerChoice === 'scissors');
+}
+
+function keepGoing() {
+  prompt(`Would you like to going (press return key)? `);
+  readline.question(); 
+}
+
+function exitGameMsg() {
+  console.clear();
+  console.log('Thank you for playing!');
+}
+
+function resetTally() {
+  ownScore = 0;
+  computerScore = 0;
 }
 
 ////////////////
