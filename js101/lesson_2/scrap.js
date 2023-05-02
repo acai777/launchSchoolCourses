@@ -1,54 +1,64 @@
-// A file to practice JS questions related to lesson 2. 
-
-
-// PSEUDOCODE 
-// a function that returns the sum of two numbers 
 /*
-START 
+Dedicate this file right now for the JS 109 written assessment
+ */
 
-Given two numbers, num1 and num2
 
-SET result = num1 + num2
-PRINT result
+// const VALID_COUNTRY_CATEGORIES = {
+//   formerOttomanEmpire: ["Macedonia", "Hungary", "Greece"],
+//   mostPopulous: "China",
+// };
 
-END 
-*/
-
-// function addName(arr, name) {
-//   arr = arr.concat([name]);
-//   console.log(arr)
+// function countryCategoryValidation(categorizedCountries) {
+//   for (let key in categorizedCountries) {
+//     if (VALID_COUNTRY_CATEGORIES[key] === categorizedCountries[key]) {
+//       console.log("correct");
+//     } else {
+//       console.log("incorrect");
+//     }
+//   }
 // }
 
-// let names = ["bob", "kim"];
-// addName(names, "jim");
-// console.log(names); // => [ 'bob', 'kim', ]
+// countryCategoryValidation({
+//   mostPopulous: "China",
+//   formerOttomanEmpire: ["Macedonia", "Hungary", "Greece"],
+// });
+// // correct
+// // incorrect
 
+// const BAND = "Peanut";
+// let season = "autumn";
 
-// function capitalize() {
-//   return word[0].toUpperCase() + word.slice(1);
+// function tour(season) {
+//   return season === "autumn" ? "is" : "is not";
 // }
 
-// function exclaim() {
-//   return word += '!!!';
+// function touringStatus(BAND, touring) {
+//   return `Australian band ${BAND} ${touring()} on tour.`;
 // }
 
-// let word = 'hello';
-// let capitalizedWord = capitalize(word);
-// let exclaimedWord = exclaim(capitalizedWord);
+// console.log(touringStatus(BAND, tour));
 
-// console.log(word);
-// console.log(capitalizedWord);
-// console.log(exclaimedWord);
+// function points(a, b = 2) {
+//   return a * b;
+// }
+// console.log(points(2));
 
-let names = ['kim', 'joe', 'sam'];
-names.forEach((_, index) => {
-  console.log(`${index + 1}: got a name! ~`);
-});
 
-// logs
-// => 1: Got a name!
-// => 2: Got a name!
-// => 3: Got a name!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
