@@ -211,4 +211,20 @@ function onlyLetters(str) { // assume input str is lower case
 }
 
 // LETTER SWAP
+function swap(str) {
+  let strArr = str.split(" ");
+  let reversed = strArr.map(elt => {
 
+    if (elt.length === 1) { // need this bc otherwise elt[elt.length - 1] and elt[0] will duplicate the one length word twice.
+      return elt;
+    }
+
+    return elt[elt.length - 1] + elt.slice(1, elt.length - 1) + elt[0]; // slice accounts for if the word is of length 1. See MDN documents
+  });
+
+  return reversed.join(" ");
+}
+
+console.log(swap('Oh what a wonderful day it is'));  // "hO thaw a londerfuw yad ti si"
+console.log(swap('Abcde'));                          // "ebcdA"
+console.log(swap('a'));                              // "a"
