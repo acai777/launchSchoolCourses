@@ -225,6 +225,105 @@ function swap(str) {
   return reversed.join(" ");
 }
 
-console.log(swap('Oh what a wonderful day it is'));  // "hO thaw a londerfuw yad ti si"
-console.log(swap('Abcde'));                          // "ebcdA"
-console.log(swap('a'));                              // "a"
+// console.log(swap('Oh what a wonderful day it is'));  // "hO thaw a londerfuw yad ti si"
+// console.log(swap('Abcde'));                          // "ebcdA"
+// console.log(swap('a'));                              // "a"
+
+// Convert a string to a number
+function stringToInteger(str) {
+  // return +str; 
+  const DIGITS = {
+    0:0,
+    1:1,
+    2:2,
+    3:3,
+    4:4,
+    5:5,
+    6:6,
+    7:7,
+    8:8,
+    9:9,
+  };
+
+  let arr = str.split("");
+  let value = 0; 
+  let test = arr.map(num => value = ((10 * value) + DIGITS[num])); // value = 4 
+  return value; 
+}
+
+// console.log(stringToInteger("4321") === 4321); // logs true
+// console.log(stringToInteger("570") === 570); // logs true
+
+// Convert a String to a Signed Number 
+function stringToSignedInteger(str) {
+  if (str[0] === '-') {
+    return -1 * stringToInteger(str.slice(1));
+  } else if (str[0] === '+') {
+    return stringToInteger(str.slice(1));
+  } else {
+    return stringToInteger(str);
+  }
+}
+
+// console.log(stringToSignedInteger("4321") === 4321); // logs true
+// console.log(stringToSignedInteger("-570") === -570); // logs true
+// console.log(stringToSignedInteger("+100") === 100); // logs true
+
+// Convert a Number to a String
+function integerToString(int) {
+  const ARR = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+  ]
+
+  if (int === 0) {
+    return ARR[0];
+  }
+
+  let newArr = [];
+  let currNum = int; 
+  let currDigit;
+
+  while (currNum !== 0) {
+    currDigit = (currNum % 10); 
+    currNum = (currNum - currDigit) / 10 
+    newArr.push(ARR[currDigit]);
+  }
+
+  return newArr.reverse().join("");
+
+}
+
+// console.log(integerToString(4321));        // "4321"
+// console.log(integerToString(0));           // "0"
+// console.log(integerToString(5000));        // "5000"
+// console.log(integerToString(1234567890));  // "1234567890"
+
+// Convert a Signed Number to a String
+function signedIntegerToString(int) {
+  if (Math.sign(int) === 1) {
+    return '+' + integerToString(int);
+  } else if (Math.sign(int) === -1) {
+    return '-' + integerToString(-1 * int);
+  } else {
+    return '0';
+  }
+}
+
+console.log(signedIntegerToString(4321));
+console.log(signedIntegerToString(-123));
+console.log(signedIntegerToString(0));
+
+console.log(signedIntegerToString(4321) === "+4321");
+console.log(signedIntegerToString(-123) === "-123");
+console.log(signedIntegerToString(0) === "0");
+console.log(signedIntegerToString(-0) === "-0");
+
