@@ -132,12 +132,12 @@ function capitalize(str) {
 
 // 8 
 // Using the forEach method, write some code to output all vowels from the strings in the arrays. Don't use a for or while loop.
-let obj = {
-  first: ['the', 'quick'],
-  second: ['brown', 'fox'],
-  third: ['jumped'],
-  fourth: ['over', 'the', 'lazy', 'dog'],
-};
+// let obj = {
+//   first: ['the', 'quick'],
+//   second: ['brown', 'fox'],
+//   third: ['jumped'],
+//   fourth: ['over', 'the', 'lazy', 'dog'],
+// };
 
 // strategis: Object.values(), get array of arrays (nested array). 
 // now, depending on how you want to output the values, can use map() or another forEach. 
@@ -146,18 +146,18 @@ let obj = {
 // use another map(). so will be returned an array of equal length as the input. 
 // here, want to only return the vowels. 
 
-let vowelsArr = Object.values(obj).map(subArr => {
-  return subArr.map(str => {
-    let vowels = '';
-    str.split("").forEach(char => {
-      if ('aeiou'.includes(char)) {
-        vowels += char; 
-      }
-    }); 
+// let vowelsArr = Object.values(obj).map(subArr => {
+//   return subArr.map(str => {
+//     let vowels = '';
+//     str.split("").forEach(char => {
+//       if ('aeiou'.includes(char)) {
+//         vowels += char; 
+//       }
+//     }); 
 
-    return vowels; 
-  });
-});
+//     return vowels; 
+//   });
+// });
 
 //console.log(vowelsArr);
 
@@ -275,3 +275,121 @@ Can't do a shallow copy as the references will still be shared (same subArray re
 
 //   return sum; 
 // }
+
+
+// 14 
+// Given the following data structure write some code to return an array containing the colors of the fruits and the sizes of the vegetables. The sizes should be uppercase, and the colors should be capitalized.
+// let obj = {
+//   grape: { type: 'fruit', colors: ['red', 'green'], size: 'small' },
+//   carrot: { type: 'vegetable', colors: ['orange'], size: 'medium' },
+//   apple: { type: 'fruit', colors: ['red', 'green'], size: 'medium' },
+//   apricot: { type: 'fruit', colors: ['orange'], size: 'medium' },
+//   marrow: { type: 'vegetable', colors: ['green'], size: 'large' },
+// };
+
+// let keysArr = Object.keys(obj); 
+
+// let result = keysArr.map(key => {
+//   if (obj[key]["type"] === 'fruit') {
+//     return obj[key]["colors"].map(color => {
+//       return color[0].toUpperCase() + color.slice(1);
+//     });
+//   } else {
+//     return obj[key]["size"].toUpperCase(); 
+//   }
+// });
+
+// console.log(result);
+
+// 15 
+// Given the following data structure, write some code to return an array which contains only the objects where all the numbers are even.
+// let arr = [
+//   { a: [1, 2, 3] },
+//   { b: [2, 4, 6], c: [3, 6], d: [4] },
+//   { e: [8], f: [6, 10] },
+// ];
+
+// let resultArr = arr.filter(obj => {
+//   return allEvenNumbers(obj);
+// });
+
+// function allEvenNumbers(obj) {
+//   let valuesArr = Object.values(obj); 
+//   let result = valuesArr.every(subArr => {
+//     return subArr.every(number => number % 2 === 0); 
+//   }); 
+
+//   return result; 
+// }
+
+// console.log(resultArr); // [{ e: [8], f: [6, 10] },]
+
+// 16 
+// Given the following data structure, write some code that defines an object where the key is the first item in each subarray, and the value is the second.
+let arr = [['a', 1], ['b', 'two'], ['sea', {'c': 3}], ['D', ['a', 'b', 'c']]];
+let obj = {}; 
+
+arr.forEach(pair => {
+  let key = pair[0];
+  let value = pair[1];
+  obj[key] = value;
+});
+
+// console.log(obj);
+
+// expected value of object
+// { a: 1, b: 'two', sea: { c: 3 }, D: [ 'a', 'b', 'c' ] }
+
+/* 17 
+A UUID is a type of identifier often used to uniquely identify items, even when some of those items were created on a different server or by a different application. That is, without any synchronization, two or more computer systems can create new items and label them with a UUID with no significant risk of stepping on each other's toes. It accomplishes this feat through massive randomization. The number of possible UUID values is approximately 3.4 X 10E38, which is a huge number. The chance of a conflict is vanishingly small with such a large number of possible values.
+
+Each UUID consists of 32 hexadecimal characters (the digits 0-9 and the letters a-f) represented as a string. The value is typically broken into 5 sections in an 8-4-4-4-12 pattern, e.g., 'f65c57f6-a6aa-17a8-faa1-a67f2dc9fa91'.
+
+Write a function that takes no arguments and returns a string that contains a UUID.
+*/
+
+/*
+Strategy:
+Write helper function to generate a random hexdecimal character, 0-9 and a-f. 16 possible choices. Can maybe use Math.random and Math.floor. Or just make an array and select from 0-15 at random, where each refers to an index of the array, which will contain the character of interest. Return the char
+
+Next, give this function the ability to give an optional parameter len, which would allow you to make a string of length len, where each char is generated at random from 0-9 and a-f. 
+
+For the original function, just call this helper function and use template literals to return the output in the desire format.
+*/
+const possibleChar = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+];
+
+function generateUUID() {
+  return `${randomhexaDec(8)}-${randomhexaDec(4)}-${randomhexaDec(4)}-${randomhexaDec(4)}-${randomhexaDec(12)}`; 
+}
+
+function randomhexaDec(len = 1, choices = possibleChar) {
+  let result = '';
+  let randomIndex; 
+
+  while (len !== 0) {
+    randomIndex = Math.floor(Math.random() * choices.length)
+    result += choices[randomIndex];
+    len -= 1; 
+  }
+
+  return result;
+}
+
+console.log(generateUUID());
