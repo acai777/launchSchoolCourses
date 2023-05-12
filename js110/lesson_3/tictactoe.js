@@ -8,7 +8,7 @@ const COMPUTER_MARKER = 'O';
 const POSSIBLE_ANSWERS = ['y', 'yes', 'n', 'no'];
 const STRATEGIC_CELL = 5;
 const PLAYER = 1;
-const GAMES_TO_WIN = 3; 
+const GAMES_TO_WIN = 3;
 
 const WINNING_COMBOS = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
