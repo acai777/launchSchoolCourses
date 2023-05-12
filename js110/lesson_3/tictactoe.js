@@ -85,11 +85,34 @@ function playerChoosesSquare(board) {
   board[square] = HUMAN_MARKER;
 }
 
-function computerChoosesSquare(board) {
+function computerChoosesSquare(board, winningLines) {
+  let potentialThreat = 
+    winningLines.filter(arr => {
+      let hasPlayerSpace = arr.filter(num => board[num] === HUMAN_MARKER);
+      return hasPlayerSpace.length === 2;
+    });
+  // want to exclude 3-cell combos where there is one computer symbol.
+  for (line = 0; line < potentialThreat.length; line += 1) { // pick first available threat, if multiple.
+    if (isActualThreat(potentialThreat[line], board)) {
+      board[isActualThreat(potentialThreat[line], board)] = COMPUTER_MARKER;
+      return;
+    }
+  }
+  // Otherwise, pick at random
   let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
-
   let square = emptySquares(board)[randomIndex];
   board[square] = COMPUTER_MARKER;
+}
+
+function isActualThreat(line, board) {
+  for (let ind = 0; ind < line.length; ind += 1) {
+    if (board[line[ind]] === INITIAL_MARKER) {
+      return line[ind]; 
+    }
+  }
+
+  return null; 
+  
 }
 
 function boardFull(board) {
@@ -182,41 +205,47 @@ function updateScore(board, yourScore, computerScore) {
 // Main Program///
 //////////////////
 // Loop for the entire program
-while (true) {
-  let board = initializeBoard();
-  displayBoard(board);
+// while (true) {
+//   let board = initializeBoard();
+//   displayBoard(board);
 
-  let yourScore = 0;
-  let computerScore = 0;
+//   let yourScore = 0;
+//   let computerScore = 0;
 
-  // Inner loop for the match (best of five)
-  while (true) {
+//   // Inner loop for the match (best of five)
+//   while (true) {
 
-    // Inner while loop for each round
-    while (true) {
-      displayBoard(board, yourScore, computerScore);
+//     // Inner while loop for each round
+//     while (true) {
+//       displayBoard(board, yourScore, computerScore);
 
-      playerChoosesSquare(board);
-      if (someoneWon(board) || boardFull(board)) break;
+//       playerChoosesSquare(board);
+//       if (someoneWon(board) || boardFull(board)) break;
 
-      computerChoosesSquare(board);
-      if (someoneWon(board) || boardFull(board)) break;
-    }
+//       computerChoosesSquare(board, WINNING_COMBOS);
+//       if (someoneWon(board) || boardFull(board)) break;
+//     }
 
-    [yourScore, computerScore] = updateScore(board, yourScore, computerScore);
-    displayBoard(board, yourScore, computerScore);
-    displayRoundResult(board);
-    if (wonOverallMatch(yourScore, computerScore)) break;
+//     [yourScore, computerScore] = updateScore(board, yourScore, computerScore);
+//     displayBoard(board, yourScore, computerScore);
+//     displayRoundResult(board);
+//     if (wonOverallMatch(yourScore, computerScore)) break;
 
-    console.log(`Press any button to go on to the next round`);
-    readline.question();
-    board = clearBoard();
-  }
+//     console.log(`Press any button to go on to the next round`);
+//     readline.question();
+//     board = clearBoard();
+//   }
 
-  displayMatchWinner(yourScore, computerScore);
-  if (!playAgain()) break;
-}
+//   displayMatchWinner(yourScore, computerScore);
+//   if (!playAgain()) break;
+// }
 
-prompt('Thanks for playing Tic Tac Toe!');
+// prompt('Thanks for playing Tic Tac Toe!');
 
 
+
+let myBoard = {1:'X', 2:'O', 3:'X', 4:' ', 5:'X', 6:' ', 7:'O', 8:' ', 9:' '};
+// console.log(myBoard);
+// displayBoard(myBoard, 1, 1);
+computerChoosesSquare(myBoard, WINNING_COMBOS);
+console.log(myBoard);
