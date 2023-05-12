@@ -3,6 +3,8 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 const POSSIBLE_ANSWERS = ['y', 'yes', 'n', 'no'];
+const STRATEGIC_CELL = 5;
+
 const WINNING_COMBOS = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
   [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
@@ -85,34 +87,55 @@ function playerChoosesSquare(board) {
   board[square] = HUMAN_MARKER;
 }
 
-function computerChoosesSquare(board, winningLines) {
-  let potentialThreat = 
-    winningLines.filter(arr => {
-      let hasPlayerSpace = arr.filter(num => board[num] === HUMAN_MARKER);
-      return hasPlayerSpace.length === 2;
-    });
-  // want to exclude 3-cell combos where there is one computer symbol.
-  for (line = 0; line < potentialThreat.length; line += 1) { // pick first available threat, if multiple.
-    if (isActualThreat(potentialThreat[line], board)) {
-      board[isActualThreat(potentialThreat[line], board)] = COMPUTER_MARKER;
+function computerChoosesSquare(board) {
+  // Offense
+  let potentialWin = isPotentialDecision(board, COMPUTER_MARKER);
+  for (line = 0; line < potentialWin.length; line += 1) { 
+    if (smartChoice(potentialWin[line], board, INITIAL_MARKER)) {
+      board[smartChoice(potentialWin[line], board, INITIAL_MARKER)] = COMPUTER_MARKER;
       return;
     }
   }
-  // Otherwise, pick at random
+  // Defense
+  let potentialThreat = isPotentialDecision(board, HUMAN_MARKER);
+  for (line = 0; line < potentialThreat.length; line += 1) { // pick first available threat, if multiple.
+    if (smartChoice(potentialThreat[line], board, INITIAL_MARKER)) {
+      board[smartChoice(potentialThreat[line], board, INITIAL_MARKER)] = COMPUTER_MARKER;
+      return;
+    }
+  }
+  // Pick 5 (most strategic position, if available)
+  if (isfiveAvailable(board)) {
+    board[STRATEGIC_CELL] =  COMPUTER_MARKER; 
+    return;
+  }
+  // Random
   let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
   let square = emptySquares(board)[randomIndex];
   board[square] = COMPUTER_MARKER;
 }
 
-function isActualThreat(line, board) {
+function isPotentialDecision(board, marker) {
+  let potential = 
+  WINNING_COMBOS.filter(arr => {
+    let hasPlayerSpace = arr.filter(num => board[num] === marker);
+    return hasPlayerSpace.length === 2;
+  });
+
+  return potential;
+}
+ 
+function smartChoice(line, board, marker) {
   for (let ind = 0; ind < line.length; ind += 1) {
-    if (board[line[ind]] === INITIAL_MARKER) {
+    if (board[line[ind]] === marker) {
       return line[ind]; 
     }
   }
-
   return null; 
-  
+}
+
+function isfiveAvailable(board) {
+  return board[STRATEGIC_CELL] === INITIAL_MARKER;
 }
 
 function boardFull(board) {
@@ -222,7 +245,7 @@ while (true) {
       playerChoosesSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
 
-      computerChoosesSquare(board, WINNING_COMBOS);
+      computerChoosesSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
     }
 
