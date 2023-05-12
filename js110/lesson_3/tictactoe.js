@@ -4,6 +4,7 @@ const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 const POSSIBLE_ANSWERS = ['y', 'yes', 'n', 'no'];
 const STRATEGIC_CELL = 5;
+const PLAYER = 1;
 
 const WINNING_COMBOS = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
@@ -11,13 +12,17 @@ const WINNING_COMBOS = [
   [1, 5, 9], [3, 5, 7]             // diagonals
 ];
 
+const POSSIBLE_INITIAL_RESPONSE = [
+  'player', 'p', 'computer', 'c', 'choose', 'ch',
+];
+
 function prompt(msg) {
   console.log(`=> ${msg}`);
 }
 
 function welcomeMsg() {
-  console.log(`This is a best of five game of TIC-TAC-TOE.\nThe first player to win five games wins the overall series.`);
-  console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}.`);
+  console.clear();
+  console.log(`This is a best of five game of TIC-TAC-TOE.\nThe first player to win five games wins the overall series.\n`);
 }
 
 function displayScores(yourScore, computerScore) {
@@ -41,7 +46,7 @@ function initializeBoard() {
 
 function displayBoard(board, yourScore, computerScore) {
   console.clear();
-  welcomeMsg();
+  console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}.`);
   displayScores(yourScore, computerScore);
 
   console.log('\n     |     |');
@@ -224,28 +229,78 @@ function updateScore(board, yourScore, computerScore) {
   return [yourScore, computerScore];
 }
 
+function displayQuestion() {
+  console.log(`Decide who goes first.`)
+  console.log(`Please select either yourself ('player'), the computer ('computer').`)
+  console.log(`If you are unsure, select 'choose' - we pick for you.`);
+  console.log(`We can also accept 'p', 'c', and 'ch' for player, computer, and choose respectively.`)
+}
+
+function whoGoesFirst() {
+  let response = readline.question().trim().toLowerCase(); 
+  while (!POSSIBLE_INITIAL_RESPONSE.includes(response)) {
+    console.log('Invalid response. Please try again. (p, c, or ch');
+    response = readline.question().trim().toLowerCase();
+  }
+
+  if (response === 'p' || response === 'player') {
+    return 'Player';
+  } else if (response === 'computer' || response === 'c') {
+    return 'Computer';
+  }
+
+  // Random
+  let randomChoice = Math.floor(Math.random() * 2);
+  if (randomChoice === PLAYER) return 'Player';
+  return 'Computer';
+
+}
+
+function chooseSquare(board, currentPlayer) {
+  if (currentPlayer === 'Player') {
+    playerChoosesSquare(board);
+  } else {
+    computerChoosesSquare(board);
+  }
+}
+
+function alternatePlayer(currentPlayer) {
+  if (currentPlayer === 'Player') {
+    return 'Computer';
+  }
+
+  return 'Player';
+}
+
 //////////////////
 // Main Program///
 //////////////////
 // Loop for the entire program
+welcomeMsg();
 while (true) {
+  displayQuestion(); 
+  let currentPlayer = whoGoesFirst(); 
+
   let board = initializeBoard();
   displayBoard(board);
 
   let yourScore = 0;
   let computerScore = 0;
+  let whoMovesNext; // need this to maintain consistency in who gets to play next across the different rounds.
 
   // Inner loop for the match (best of five)
   while (true) {
+    
+    if (whoMovesNext) {
+      currentPlayer = whoMovesNext;
+    }
 
     // Inner while loop for each round
     while (true) {
       displayBoard(board, yourScore, computerScore);
 
-      playerChoosesSquare(board);
-      if (someoneWon(board) || boardFull(board)) break;
-
-      computerChoosesSquare(board);
+      chooseSquare(board, currentPlayer);
+      currentPlayer = alternatePlayer(currentPlayer);
       if (someoneWon(board) || boardFull(board)) break;
     }
 
@@ -257,6 +312,7 @@ while (true) {
     console.log(`Press any button to go on to the next round`);
     readline.question();
     board = clearBoard();
+    whoMovedNext = currentPlayer;
   }
 
   displayMatchWinner(yourScore, computerScore);
