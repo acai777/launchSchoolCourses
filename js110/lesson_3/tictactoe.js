@@ -3,6 +3,11 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 const POSSIBLE_ANSWERS = ['y', 'yes', 'n', 'no'];
+const WINNING_COMBOS = [
+  [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
+  [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
+  [1, 5, 9], [3, 5, 7]             // diagonals
+];
 
 function prompt(msg) {
   console.log(`=> ${msg}`);
@@ -10,7 +15,7 @@ function prompt(msg) {
 
 function welcomeMsg() {
   console.log(`This is a best of five game of TIC-TAC-TOE.\nThe first player to win five games wins the overall series.`);
-  console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
+  console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}.`);
 }
 
 function displayScores(yourScore, computerScore) {
@@ -21,6 +26,7 @@ function displayScores(yourScore, computerScore) {
   console.log(` Computer |   ${computerScore}   |`);
   console.log(`          |_______|`);
 }
+
 function initializeBoard() {
   let board = {};
 
@@ -91,16 +97,10 @@ function boardFull(board) {
 }
 
 function someoneWon(board) {
-  return !!detectWinner(board);
+  return !!detectWinner(board, WINNING_COMBOS);
 }
 
-function detectWinner(board) {
-  let winningLines = [
-    [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
-    [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
-    [1, 5, 9], [3, 5, 7]             // diagonals
-  ];
-
+function detectWinner(board, winningLines) {
   for (let line = 0; line < winningLines.length; line++) {
     let [ sq1, sq2, sq3 ] = winningLines[line];
 
@@ -142,7 +142,7 @@ function clearBoard() {
 
 function displayRoundResult(board) {
   if (someoneWon(board)) {
-    prompt(`${detectWinner(board)} won this round!`);
+    prompt(`${detectWinner(board, WINNING_COMBOS)} won this round!`);
   } else {
     prompt("It's a tie!");
   }
@@ -167,7 +167,7 @@ function playAgain() {
 
 function updateScore(board, yourScore, computerScore) {
   if (someoneWon(board)) {
-    let winner = detectWinner(board);
+    let winner = detectWinner(board, WINNING_COMBOS);
     if (winner === 'Player') {
       yourScore += 1;
     } else {
