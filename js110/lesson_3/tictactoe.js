@@ -1,3 +1,6 @@
+//////////////////
+// Constants
+//////////////////
 const readline = require('readline-sync');
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
@@ -16,6 +19,9 @@ const POSSIBLE_INITIAL_RESPONSE = [
   'player', 'p', 'computer', 'c', 'choose', 'ch',
 ];
 
+////////////////////
+// Helper Functions
+////////////////////
 function prompt(msg) {
   console.log(`=> ${msg}`);
 }
@@ -94,34 +100,34 @@ function playerChoosesSquare(board) {
 
 function computerChoosesSquare(board) {
   // Offense
-  let potentialWin = isPotentialDecision(board, COMPUTER_MARKER);
-  for (line = 0; line < potentialWin.length; line += 1) { 
-    if (smartChoice(potentialWin[line], board, INITIAL_MARKER)) {
-      board[smartChoice(potentialWin[line], board, INITIAL_MARKER)] = COMPUTER_MARKER;
+  let win = isPotentialDecision(board, COMPUTER_MARKER);
+  for (let line = 0; line < win.length; line += 1) {
+    if (smartChoice(win[line], board, INITIAL_MARKER)) {
+      board[smartChoice(win[line], board, INITIAL_MARKER)] = COMPUTER_MARKER;
       return;
     }
   }
   // Defense
-  let potentialThreat = isPotentialDecision(board, HUMAN_MARKER);
-  for (line = 0; line < potentialThreat.length; line += 1) { // pick first available threat, if multiple.
-    if (smartChoice(potentialThreat[line], board, INITIAL_MARKER)) {
-      board[smartChoice(potentialThreat[line], board, INITIAL_MARKER)] = COMPUTER_MARKER;
+  let lose = isPotentialDecision(board, HUMAN_MARKER);
+  for (let line = 0; line < lose.length; line += 1) { // pick first available threat, if multiple.
+    if (smartChoice(lose[line], board, INITIAL_MARKER)) {
+      board[smartChoice(lose[line], board, INITIAL_MARKER)] = COMPUTER_MARKER;
       return;
     }
   }
   // Pick 5 (most strategic position, if available)
   if (isfiveAvailable(board)) {
-    board[STRATEGIC_CELL] =  COMPUTER_MARKER; 
-    return;
-  }
+    board[STRATEGIC_CELL] =  COMPUTER_MARKER;
+  } else {
   // Random
-  let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
-  let square = emptySquares(board)[randomIndex];
-  board[square] = COMPUTER_MARKER;
+    let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
+    let square = emptySquares(board)[randomIndex];
+    board[square] = COMPUTER_MARKER;
+  }
 }
 
 function isPotentialDecision(board, marker) {
-  let potential = 
+  let potential =
   WINNING_COMBOS.filter(arr => {
     let hasPlayerSpace = arr.filter(num => board[num] === marker);
     return hasPlayerSpace.length === 2;
@@ -129,14 +135,14 @@ function isPotentialDecision(board, marker) {
 
   return potential;
 }
- 
+
 function smartChoice(line, board, marker) {
   for (let ind = 0; ind < line.length; ind += 1) {
     if (board[line[ind]] === marker) {
-      return line[ind]; 
+      return line[ind];
     }
   }
-  return null; 
+  return null;
 }
 
 function isfiveAvailable(board) {
@@ -230,14 +236,14 @@ function updateScore(board, yourScore, computerScore) {
 }
 
 function displayQuestion() {
-  console.log(`Decide who goes first.`)
-  console.log(`Please select either yourself ('player'), the computer ('computer').`)
+  console.log(`Decide who goes first.`);
+  console.log(`Please select either yourself ('player'), the computer ('computer').`);
   console.log(`If you are unsure, select 'choose' - we pick for you.`);
-  console.log(`We can also accept 'p', 'c', and 'ch' for player, computer, and choose respectively.`)
+  console.log(`We can also accept 'p', 'c', and 'ch' for player, computer, and choose respectively.`);
 }
 
 function whoGoesFirst() {
-  let response = readline.question().trim().toLowerCase(); 
+  let response = readline.question().trim().toLowerCase();
   while (!POSSIBLE_INITIAL_RESPONSE.includes(response)) {
     console.log('Invalid response. Please try again. (p, c, or ch');
     response = readline.question().trim().toLowerCase();
@@ -273,13 +279,13 @@ function alternatePlayer(currentPlayer) {
 }
 
 //////////////////
-// Main Program///
+// Main Program
 //////////////////
 // Loop for the entire program
 welcomeMsg();
 while (true) {
-  displayQuestion(); 
-  let currentPlayer = whoGoesFirst(); 
+  displayQuestion();
+  let currentPlayer = whoGoesFirst();
 
   let board = initializeBoard();
   displayBoard(board);
@@ -290,7 +296,7 @@ while (true) {
 
   // Inner loop for the match (best of five)
   while (true) {
-    
+
     if (whoMovesNext) {
       currentPlayer = whoMovesNext;
     }
