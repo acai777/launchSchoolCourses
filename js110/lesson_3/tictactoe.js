@@ -240,7 +240,7 @@ function displayQuestion() {
   console.log(`Decide who goes first.`);
   console.log(`Please select either yourself ('player'), the computer ('computer').`);
   console.log(`If you are unsure, select 'choose' - we pick for you.`);
-  console.log(`We can also accept 'p', 'c', and 'ch' for player, computer, and choose respectively.`);
+  console.log(`We also accept 'p', 'c', and 'ch' for player, computer, and choose respectively.`);
 }
 
 function whoGoesFirst() {
