@@ -27,14 +27,12 @@ const SUITS = [
   'Clubs',
 ];
 
-////////////////////
-// 
-////////////////////
-// let deck = initializeDeck(); 
-// let score = generateScore(); 
-// let playerCards = [];
-// let computerCards = [];
+const PLAYER_RESPONSES = ['p', 'play', 'h', 'hit'];
+const HIGHEST_VALID_SCORE = 21; 
 
+////////////////////
+// Helper Functions
+////////////////////
 function initializeDeck() {
   let deck = makeDeck();
   shuffle(deck); 
@@ -60,6 +58,7 @@ function shuffle(array) {
 }
 
 function displayCards(playerCards, computerCards) {
+  console.clear();
   let computerFirstCard = computerCards[0][1];
   console.log(`Dealer has: ${computerFirstCard} and unknown card.`);
   console.log(`You have: ${joinAnd(playerCards)}.`);
@@ -78,17 +77,93 @@ function initialDealing(shuffledDeck, playerCards, computerCards) {
   playerCards.push(...shuffledDeck.splice(0,2)); // remove first two cards
   computerCards.push(...shuffledDeck.splice(0,2)); 
 }
+function total(cards) {
+  let values = cards.map(subArr => subArr[1]);
+  let sum = 0;
 
+  values.forEach(value => {
+    if (value === 'A') {
+      sum += 11;
+    } else if (['J', 'Q', 'K'].includes(value)) {
+      sum += 10;
+    } else {
+      sum += Number(value); 
+    }
+  });
+
+  values.filter(elt => elt === 'A').forEach(_ => {
+    if (sum > 21) sum -= 10;
+  });
+
+  return sum; 
+}
+
+function generateScoreBoard() {
+  return {playerScore: 0, computerScore: 0};
+}
+
+function updateScores(score, playerCards, computerCards) {
+  score.playerScore = total(playerCards);
+  score.computerScore = total(computerCards);
+}
+
+function playerPrompt() {
+  console.log(`Would you like to play or hit? Select 'p' to play, 'h' to hit.`);
+  let answer = readline.question().trim().toLowerCase(); 
+  while (!PLAYER_RESPONSES.includes(answer)) {
+    console.log(`Sorry, invalid response. Please try again (p or h).`);
+    answer = readline.question().trim().toLowerCase()
+  }
+
+  return answer; 
+}
+
+function playerHits(shuffledDeck, playerCards) {
+  playerCards.push(shuffledDeck.pop()); 
+}
+
+function busted(user, score) {
+  if (user === PLAYER) {
+    return score.playerScore > HIGHEST_VALID_SCORE;
+  }
+
+  return score.computerScore > HIGHEST_VALID_SCORE;
+}
+////////////////////
+// Main Programs
+////////////////////
 console.clear();
-let shuffledDeck = initializeDeck();
+let shuffledDeck = initializeDeck(); // generates randomized deck.
 let playerCards = [];
 let computerCards = [];
-initialDealing(shuffledDeck, playerCards, computerCards);
-displayCards(playerCards, computerCards);
+let score = generateScoreBoard();
+initialDealing(shuffledDeck, playerCards, computerCards); // initial dealing. 
+updateScores(score, playerCards, computerCards);
+displayCards(playerCards, computerCards); // display cards. 
 
-// console.log(playerCards);
-// console.log(computerCards);
-// console.log(shuffledDeck);
+
+//console.log(score);
+
+
+// Player turn 
+while (true) {
+  let playerChoice = playerPrompt();
+  if (playerChoice === 'stay' || playerChoice === 's') break;
+  playerHits(shuffledDeck, playerCards); 
+  updateScores(score, playerCards, computerCards);
+
+  if (busted(PLAYER, score)) break; 
+  displayCards(playerCards, computerCards);
+  
+}
+
+displayCards(playerCards, computerCards);
+console.log('You got busted')
+
+
+
+
+
 
 
 
