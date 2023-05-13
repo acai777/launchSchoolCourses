@@ -103,7 +103,7 @@ function total(cards) {
     }
   });
 
-  values.filter(elt => elt === 'A').forEach(_ => {
+  values.filter(elt => elt === ACE).forEach(_ => {
     if (sum > 21) sum -= 10;
   });
 
