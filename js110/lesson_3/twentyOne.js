@@ -27,7 +27,7 @@ const SUITS = [
   'Clubs',
 ];
 
-const PLAYER_RESPONSES = ['p', 'play', 'h', 'hit'];
+const PLAYER_RESPONSES = ['s', 'stay', 'h', 'hit'];
 const HIGHEST_VALID_SCORE = 21; 
 
 ////////////////////
@@ -108,10 +108,10 @@ function updateScores(score, playerCards, computerCards) {
 }
 
 function playerPrompt() {
-  console.log(`Would you like to play or hit? Select 'p' to play, 'h' to hit.`);
+  console.log(`Would you like to stay or hit? Select 's' to stay, 'h' to hit.`);
   let answer = readline.question().trim().toLowerCase(); 
   while (!PLAYER_RESPONSES.includes(answer)) {
-    console.log(`Sorry, invalid response. Please try again (p or h).`);
+    console.log(`Sorry, invalid response. Please try again (s or h).`);
     answer = readline.question().trim().toLowerCase()
   }
 
