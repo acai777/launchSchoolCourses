@@ -3,6 +3,8 @@
 //////////////////
 const readline = require('readline-sync');
 const PLAYER = '0'; 
+const COMPUTER = '1';
+const TIE = 2;
 
 const CARDS = [
   'A',
@@ -57,11 +59,19 @@ function shuffle(array) {
   }
 }
 
-function displayCards(playerCards, computerCards) {
+function displayCards(playerCards, computerCards, revealAll = false) {
   console.clear();
-  let computerFirstCard = computerCards[0][1];
-  console.log(`Dealer has: ${computerFirstCard} and unknown card.`);
-  console.log(`You have: ${joinAnd(playerCards)}.`);
+
+  if (!revealAll) {
+    let computerFirstCard = computerCards[0][1];
+    console.log(`Dealer has: ${computerFirstCard} and unknown card.`);
+    console.log(`You have: ${joinAnd(playerCards)}.`);
+  } else {
+    console.log(`Dealer's final cards are: ${joinAnd(computerCards)}.`);
+    console.log(`Your final cards are: ${joinAnd(playerCards)}.`);
+  }
+
+  console.log();
 }
 
 function joinAnd(arr) {
@@ -123,12 +133,33 @@ function playerHits(shuffledDeck, playerCards) {
 }
 
 function busted(user, score) {
-  if (user === PLAYER) {
-    return score.playerScore > HIGHEST_VALID_SCORE;
+  if (user === PLAYER) return score.playerScore > HIGHEST_VALID_SCORE;
+  if (user === COMPUTER) return score.computerScore > HIGHEST_VALID_SCORE;
+}
+
+function decideWinner(score) {
+  if (score.playerScore > score.computerScore) {
+    return PLAYER;
+  } else if (score.playerScore < score.computerScore) {
+    return COMPUTER;
   }
 
-  return score.computerScore > HIGHEST_VALID_SCORE;
+  return TIE;
 }
+
+function displayWinnerRound(winner, score) {
+  console.log(`Your final score: ${score.playerScore}`);
+  console.log(`Computer final score: ${score.computerScore}.`);
+
+  if (winner === PLAYER) {
+    console.log('You won the game of twenty one. Congrats!');
+  } else if (winner === COMPUTER) {
+    console.log('The computer won the game!');
+  } else {
+    console.log(`Both of you got the same score of ${score.playerScore}! Wow, what are the odds?`);
+  }
+}
+
 ////////////////////
 // Main Programs
 ////////////////////
@@ -141,10 +172,6 @@ initialDealing(shuffledDeck, playerCards, computerCards); // initial dealing.
 updateScores(score, playerCards, computerCards);
 displayCards(playerCards, computerCards); // display cards. 
 
-
-//console.log(score);
-
-
 // Player turn 
 while (true) {
   let playerChoice = playerPrompt();
@@ -154,15 +181,31 @@ while (true) {
 
   if (busted(PLAYER, score)) break; 
   displayCards(playerCards, computerCards);
-  
 }
 
 displayCards(playerCards, computerCards);
-console.log('You got busted')
+if (busted(PLAYER, score)) {
+  console.log(`You ended up drawing over 21. You lost! Would you like to play again?`);
+} else {
+  console.log(`You chose to stay! Press any key to see what the computer decides.`);
+  readline.question();
+}
 
+// Computer Turn
+while (score.computerScore < 17) {
+  computerCards.push(shuffledDeck.pop()); 
+  updateScores(score, playerCards, computerCards);
+  if (busted(COMPUTER, score)) break; 
+} 
 
-
-
+// Result of the round
+displayCards(playerCards, computerCards, true);
+if (busted(COMPUTER, score)) {
+  console.log(`The computer ended up drawing over 21. You won! Would you like to play again?`);
+} else {
+  let winner = decideWinner(score);
+  displayWinnerRound(winner, score);
+}
 
 
 
