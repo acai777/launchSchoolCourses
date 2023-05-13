@@ -5,6 +5,8 @@ const readline = require('readline-sync');
 const PLAYER = '0'; 
 const COMPUTER = '1';
 const TIE = 2;
+const ACE = 'A';
+const FACE_CARDS = ['J', 'Q', 'K'];
 
 const CARDS = [
   'A',
@@ -92,9 +94,9 @@ function total(cards) {
   let sum = 0;
 
   values.forEach(value => {
-    if (value === 'A') {
+    if (value === ACE) {
       sum += 11;
-    } else if (['J', 'Q', 'K'].includes(value)) {
+    } else if (FACE_CARDS.includes(value)) {
       sum += 10;
     } else {
       sum += Number(value); 
@@ -208,7 +210,7 @@ if (busted(COMPUTER, score)) {
 }
 
 
-
+// NEXT: think about how to break this up into mini functions.
 
 
 
