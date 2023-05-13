@@ -7,6 +7,7 @@ const COMPUTER = '1';
 const TIE = 2;
 const ACE = 'A';
 const FACE_CARDS = ['J', 'Q', 'K'];
+COMPUTER_MIN_STOPPING_SCORE = 17;
 
 const CARDS = [
   'A',
@@ -194,7 +195,7 @@ if (busted(PLAYER, score)) {
 }
 
 // Computer Turn
-while (score.computerScore < 17) {
+while (score.computerScore < COMPUTER_MIN_STOPPING_SCORE) {
   computerCards.push(shuffledDeck.pop()); 
   updateScores(score, playerCards, computerCards);
   if (busted(COMPUTER, score)) break; 
