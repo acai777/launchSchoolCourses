@@ -9,7 +9,8 @@ const ACE = 'A';
 const FACE_CARDS = ['J', 'Q', 'K'];
 const COMPUTER_MIN_STOPPING_SCORE = 17;
 const REVEAL_ALL = true;
-const PLAYER_RESPONSES = ['s', 'stay', 'h', 'hit'];
+const DEFAULT_STAY = '';
+const PLAYER_RESPONSES = ['s', 'stay', 'h', 'hit', DEFAULT_STAY];
 const HIGHEST_VALID_SCORE = 21;
 const HIT = 'h';
 const BEST_FIVE_WIN_SCORE = 3;
@@ -88,6 +89,10 @@ function shuffle(array) {
 
 function displayCards(playerCards, computerCards, boxScore, revealAll = false) {
   console.clear();
+  console.log(` ------------------------------------------`);
+  console.log(`| Select 's' or press the enter key to stay.|`);
+  console.log(`| Press 'h' to hit.                         |`);
+  console.log(` ------------------------------------------`);
   displayScores(boxScore);
 
   if (!revealAll) {
@@ -146,7 +151,7 @@ function updateScores(score, playerCards, computerCards) {
 }
 
 function playerPrompt() {
-  console.log(`Would you like to stay or hit? Select 's' to stay, 'h' to hit.`);
+  console.log(`Would you like to stay or hit?`);
   let answer = readline.question().trim().toLowerCase();
   while (!PLAYER_RESPONSES.includes(answer)) {
     console.log(`Sorry, invalid response. Please try again (s or h).`);
@@ -205,7 +210,7 @@ function playerPicksCard(shuffledDeck, playerCards, computerCards, score, boxSco
 
 function playerTurn(shuffledDeck, playerCards, computerCards, score, boxScore) {
   let playerChoice = playerPrompt();
-  while (playerChoice[0] === HIT) {
+  while (playerChoice !== DEFAULT_STAY || playerChoice[0] === HIT) {
     playerPicksCard(shuffledDeck, playerCards, computerCards, score, boxScore);
     displayCards(playerCards, computerCards, boxScore);
     if (busted(PLAYER, score)) break;
@@ -352,3 +357,6 @@ goodbyeMsg();
 
 
 
+// let hi = readline.question();
+// console.log(hi);
+// console.log(hi === '');
