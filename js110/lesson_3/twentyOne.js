@@ -146,6 +146,13 @@ function generateScoreBoard() {
   return {playerScore: 0, computerScore: 0};
 }
 
+function generateBoxScore() {
+  let boxScore = {};
+  boxScore[PLAYER] = 0;
+  boxScore[COMPUTER] = 0;
+  return boxScore;
+}
+
 function updateScores(score, playerCards, computerCards) {
   score.playerScore = total(playerCards);
   score.computerScore = total(computerCards);
@@ -333,7 +340,7 @@ function playAgain() {
 
 function bestOfFive() {
   while (true) {
-    const boxScore = {0:0, 1:0};
+    const boxScore = generateBoxScore();
 
     while (true) {
       playRound(boxScore);
