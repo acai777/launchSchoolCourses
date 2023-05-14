@@ -43,7 +43,7 @@ const SUITS = [
 // Helper Functions
 ////////////////////
 function welcomeMsg() {
-  console.clear(); 
+  console.clear();
   console.log('Welcome to Twenty-One!');
   console.log('You will play against the computer in a best of five match.');
   console.log('Hit enter when you are ready to begin. Good luck :)');
@@ -90,6 +90,7 @@ function shuffle(array) {
 function displayCards(playerCards, computerCards, boxScore, revealAll = false) {
   console.clear();
   console.log(` ------------------------------------------`);
+  console.log(`| When prompted...                          |`);
   console.log(`| Select 's' or press the enter key to stay.|`);
   console.log(`| Press 'h' to hit.                         |`);
   console.log(` ------------------------------------------`);
@@ -203,15 +204,15 @@ function initializeEmptyHands() {
   return [[], []];
 }
 
-function playerPicksCard(shuffledDeck, playerCards, computerCards, score, boxScore) {
-  playerHits(shuffledDeck, playerCards);
-  updateScores(score, playerCards, computerCards);
+function playerPicksCard(shuffledDeck, pCards, cCards, score) {
+  playerHits(shuffledDeck, pCards);
+  updateScores(score, pCards, cCards);
 }
 
 function playerTurn(shuffledDeck, playerCards, computerCards, score, boxScore) {
   let playerChoice = playerPrompt();
   while (playerChoice !== DEFAULT_STAY || playerChoice[0] === HIT) {
-    playerPicksCard(shuffledDeck, playerCards, computerCards, score, boxScore);
+    playerPicksCard(shuffledDeck, playerCards, computerCards, score);
     displayCards(playerCards, computerCards, boxScore);
     if (busted(PLAYER, score)) break;
     playerChoice = playerPrompt();
@@ -239,22 +240,20 @@ function checkIfLost(user, score) {
   return null;
 }
 
-function computerTurn(shuffledDeck, playerCards, computerCards, score, boxScore) {
+function computerTurn(shuffledDeck, pCards, cCards, score, boxScore) {
   while (score.computerScore < COMPUTER_MIN_STOPPING_SCORE) {
-    computerCards.push(shuffledDeck.pop());
-    updateScores(score, playerCards, computerCards);
+    cCards.push(shuffledDeck.pop());
+    updateScores(score, pCards, cCards);
   }
 
   // Need this code to update box score BEFORE moving on to next round.
   if (checkIfLost(COMPUTER, score)) {
     boxScore[PLAYER] += 1;
     roundEndMsg(COMPUTER, score);
-  } else { 
-    if (decideWinner(score) === PLAYER) {
-      boxScore[PLAYER] += 1;
-    } else if (decideWinner(score) === COMPUTER) {
-      boxScore[COMPUTER] += 1;
-    }
+  } else if (decideWinner(score) === PLAYER) {
+    boxScore[PLAYER] += 1;
+  } else if (decideWinner(score) === COMPUTER) {
+    boxScore[COMPUTER] += 1;
   }
 }
 
@@ -264,10 +263,10 @@ function playerLostFirst(playerCards, computerCards, score, boxScore) {
   roundEndMsg(PLAYER, score);
 }
 
-function continueRestOfRound(shuffledDeck, playerCards, computerCards, score, boxScore) {
+function contRestOfRound(shuffledDeck, pCards, cCards, score, boxScore) {
   roundEndMsg(PLAYER, score);
-  computerTurn(shuffledDeck, playerCards, computerCards, score, boxScore);
-  displayCards(playerCards, computerCards, boxScore, REVEAL_ALL);
+  computerTurn(shuffledDeck, pCards, cCards, score, boxScore);
+  displayCards(pCards, cCards, boxScore, REVEAL_ALL);
 }
 
 function playRound(boxScore) {
@@ -288,12 +287,11 @@ function playRound(boxScore) {
   if (checkIfLost(PLAYER, score)) {
     playerLostFirst(playerCards, computerCards, score, boxScore);
   } else {
-    continueRestOfRound(shuffledDeck, playerCards, computerCards, score, boxScore);
+    contRestOfRound(shuffledDeck, playerCards, computerCards, score, boxScore);
   }
 
   // Decide winner; end of round.
-  let winner = decideWinner(score);
-  displayWinnerRound(winner, score);
+  displayWinnerRound(decideWinner(score), score);
 
   // Prompt user to move on to next round, if no winner of best of five
   if (!detectBestOfFiveWinner(boxScore)) {
@@ -302,7 +300,8 @@ function playRound(boxScore) {
 }
 
 function detectBestOfFiveWinner(boxScore) {
-  return boxScore[PLAYER] >= BEST_FIVE_WIN_SCORE || boxScore[COMPUTER] >= BEST_FIVE_WIN_SCORE;
+  return boxScore[PLAYER] >= BEST_FIVE_WIN_SCORE
+      || boxScore[COMPUTER] >= BEST_FIVE_WIN_SCORE;
 }
 
 function displayBestOfFiveMsg(boxScore) {
@@ -311,7 +310,7 @@ function displayBestOfFiveMsg(boxScore) {
   console.log(`You finished with a tally of ${boxScore[PLAYER]}.`);
   console.log(`The computer finished with a tally of ${boxScore[COMPUTER]}`);
 
-  if (boxScore[PLAYER] >= BEST_FIVE_WIN_SCORE) console.log(`Congrats on winning the overall best of five!`)
+  if (boxScore[PLAYER] >= BEST_FIVE_WIN_SCORE) console.log(`Congrats on winning the overall best of five!`);
   if (boxScore[COMPUTER] >= BEST_FIVE_WIN_SCORE) console.log(`The computer won the best of five game!`);
   console.log('----------------------------------------------------------');
   console.log();
@@ -334,8 +333,8 @@ function playAgain() {
 
 function bestOfFive() {
   while (true) {
-    const boxScore = {'0':0, '1':0}
-  
+    const boxScore = {0:0, 1:0};
+
     while (true) {
       playRound(boxScore);
       if (detectBestOfFiveWinner(boxScore)) {
@@ -351,12 +350,6 @@ function bestOfFive() {
 ////////////////////
 // Main Program
 ////////////////////
-welcomeMsg(); 
+welcomeMsg();
 bestOfFive();
 goodbyeMsg();
-
-
-
-// let hi = readline.question();
-// console.log(hi);
-// console.log(hi === '');
