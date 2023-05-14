@@ -7,7 +7,11 @@ const COMPUTER = '1';
 const TIE = 2;
 const ACE = 'A';
 const FACE_CARDS = ['J', 'Q', 'K'];
-COMPUTER_MIN_STOPPING_SCORE = 17;
+const COMPUTER_MIN_STOPPING_SCORE = 17;
+const REVEAL_ALL = true; 
+const PLAYER_RESPONSES = ['s', 'stay', 'h', 'hit'];
+const HIGHEST_VALID_SCORE = 21; 
+const HIT = 'h';
 
 const CARDS = [
   'A',
@@ -31,9 +35,6 @@ const SUITS = [
   'Diamonds',
   'Clubs',
 ];
-
-const PLAYER_RESPONSES = ['s', 'stay', 'h', 'hit'];
-const HIGHEST_VALID_SCORE = 21; 
 
 ////////////////////
 // Helper Functions
@@ -141,6 +142,9 @@ function busted(user, score) {
 }
 
 function decideWinner(score) {
+  if (score.playerScore > HIGHEST_VALID_SCORE) return COMPUTER;
+  if (score.computerScore > HIGHEST_VALID_SCORE) return PLAYER;
+
   if (score.playerScore > score.computerScore) {
     return PLAYER;
   } else if (score.playerScore < score.computerScore) {
@@ -163,57 +167,90 @@ function displayWinnerRound(winner, score) {
   }
 }
 
+function initializeEmptyHands() {
+  return [[], []];
+}
+
+function playerTurn(shuffledDeck, playerCards, computerCards, score) {
+  playerHits(shuffledDeck, playerCards); 
+  updateScores(score, playerCards, computerCards);
+  displayCards(playerCards, computerCards);
+}
+
+function roundEndMsg(user, score) {
+  if (user === PLAYER) {
+    if (busted(PLAYER, score)) {
+      console.log(`You ended up drawing over 21.`);
+    } else {
+      console.log(`You chose to stay! Press enter to see what the computer decides.`);
+      readline.question();
+    }
+  }
+
+  if (user === COMPUTER && busted(COMPUTER, score)) {
+    console.log(`The computer ended up drawing over 21.`);
+  } 
+}
+
+function checkIfLost(user, score) {
+  if (user === PLAYER) return busted(PLAYER, score); 
+  if (user === COMPUTER) return busted(COMPUTER, score); 
+}
+
+function computerTurn(shuffledDeck, playerCards, computerCards, score) {
+  while (score.computerScore < COMPUTER_MIN_STOPPING_SCORE) {
+    computerCards.push(shuffledDeck.pop()); 
+    updateScores(score, playerCards, computerCards);
+  }
+}
+
+function playerLostFirst(playerCards, computerCards, score) {
+  displayCards(playerCards, computerCards, REVEAL_ALL);
+  roundEndMsg(PLAYER, score);
+}
+
+function continueRestOfRound(shuffledDeck, playerCards, computerCards, score) {
+  roundEndMsg(PLAYER, score);
+  computerTurn(shuffledDeck, playerCards, computerCards, score);
+  displayCards(playerCards, computerCards, REVEAL_ALL);
+}
+
+
 ////////////////////
 // Main Programs
 ////////////////////
 console.clear();
 let shuffledDeck = initializeDeck(); // generates randomized deck.
-let playerCards = [];
-let computerCards = [];
+let [playerCards, computerCards] = initializeEmptyHands();
 let score = generateScoreBoard();
 initialDealing(shuffledDeck, playerCards, computerCards); // initial dealing. 
 updateScores(score, playerCards, computerCards);
 displayCards(playerCards, computerCards); // display cards. 
 
 // Player turn 
-while (true) {
-  let playerChoice = playerPrompt();
-  if (playerChoice === 'stay' || playerChoice === 's') break;
-  playerHits(shuffledDeck, playerCards); 
-  updateScores(score, playerCards, computerCards);
-
-  if (busted(PLAYER, score)) break; 
+let playerChoice = playerPrompt();
+while (playerChoice[0] === HIT) {
+  playerTurn(shuffledDeck, playerCards, computerCards, score);
   displayCards(playerCards, computerCards);
+  if (busted(PLAYER, score)) break; 
+  playerChoice = playerPrompt();
 }
 
-displayCards(playerCards, computerCards);
-if (busted(PLAYER, score)) {
-  console.log(`You ended up drawing over 21. You lost! Would you like to play again?`);
+displayCards(playerCards, computerCards); // clears user input
+
+if (checkIfLost(PLAYER, score)) {
+  playerLostFirst(playerCards, computerCards, score);
 } else {
-  console.log(`You chose to stay! Press any key to see what the computer decides.`);
-  readline.question();
+  // computer turn
+  continueRestOfRound(shuffledDeck, playerCards, computerCards, score);
+
+  if (checkIfLost(COMPUTER, score)) {
+    roundEndMsg(COMPUTER, score);
+  } 
 }
 
-// Computer Turn
-while (score.computerScore < COMPUTER_MIN_STOPPING_SCORE) {
-  computerCards.push(shuffledDeck.pop()); 
-  updateScores(score, playerCards, computerCards);
-  if (busted(COMPUTER, score)) break; 
-} 
-
-// Result of the round
-displayCards(playerCards, computerCards, true);
-if (busted(COMPUTER, score)) {
-  console.log(`The computer ended up drawing over 21. You won! Would you like to play again?`);
-} else {
-  let winner = decideWinner(score);
-  displayWinnerRound(winner, score);
-}
-
-
-// NEXT: think about how to break this up into mini functions.
-
-
+let winner = decideWinner(score);
+displayWinnerRound(winner, score);
 
 
 
