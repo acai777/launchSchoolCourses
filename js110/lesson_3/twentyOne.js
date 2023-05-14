@@ -2,15 +2,15 @@
 // Constants
 //////////////////
 const readline = require('readline-sync');
-const PLAYER = '0'; 
+const PLAYER = '0';
 const COMPUTER = '1';
 const TIE = 2;
 const ACE = 'A';
 const FACE_CARDS = ['J', 'Q', 'K'];
 const COMPUTER_MIN_STOPPING_SCORE = 17;
-const REVEAL_ALL = true; 
+const REVEAL_ALL = true;
 const PLAYER_RESPONSES = ['s', 'stay', 'h', 'hit'];
-const HIGHEST_VALID_SCORE = 21; 
+const HIGHEST_VALID_SCORE = 21;
 const HIT = 'h';
 
 const CARDS = [
@@ -41,7 +41,7 @@ const SUITS = [
 ////////////////////
 function initializeDeck() {
   let deck = makeDeck();
-  shuffle(deck); 
+  shuffle(deck);
   return deck;
 }
 
@@ -52,7 +52,7 @@ function makeDeck() {
       let card = [SUITS[suit], CARDS[val]];
       deck.push(card);
     }
-  } 
+  }
   return deck;
 }
 
@@ -89,7 +89,7 @@ function joinAnd(arr) {
 
 function initialDealing(shuffledDeck, playerCards, computerCards) {
   playerCards.push(...shuffledDeck.splice(0,2)); // remove first two cards
-  computerCards.push(...shuffledDeck.splice(0,2)); 
+  computerCards.push(...shuffledDeck.splice(0,2));
 }
 function total(cards) {
   let values = cards.map(subArr => subArr[1]);
@@ -101,7 +101,7 @@ function total(cards) {
     } else if (FACE_CARDS.includes(value)) {
       sum += 10;
     } else {
-      sum += Number(value); 
+      sum += Number(value);
     }
   });
 
@@ -109,7 +109,7 @@ function total(cards) {
     if (sum > 21) sum -= 10;
   });
 
-  return sum; 
+  return sum;
 }
 
 function generateScoreBoard() {
@@ -123,22 +123,24 @@ function updateScores(score, playerCards, computerCards) {
 
 function playerPrompt() {
   console.log(`Would you like to stay or hit? Select 's' to stay, 'h' to hit.`);
-  let answer = readline.question().trim().toLowerCase(); 
+  let answer = readline.question().trim().toLowerCase();
   while (!PLAYER_RESPONSES.includes(answer)) {
     console.log(`Sorry, invalid response. Please try again (s or h).`);
-    answer = readline.question().trim().toLowerCase()
+    answer = readline.question().trim().toLowerCase();
   }
 
-  return answer; 
+  return answer;
 }
 
 function playerHits(shuffledDeck, playerCards) {
-  playerCards.push(shuffledDeck.pop()); 
+  playerCards.push(shuffledDeck.pop());
 }
 
 function busted(user, score) {
   if (user === PLAYER) return score.playerScore > HIGHEST_VALID_SCORE;
   if (user === COMPUTER) return score.computerScore > HIGHEST_VALID_SCORE;
+
+  return null;
 }
 
 function decideWinner(score) {
@@ -171,10 +173,20 @@ function initializeEmptyHands() {
   return [[], []];
 }
 
-function playerTurn(shuffledDeck, playerCards, computerCards, score) {
-  playerHits(shuffledDeck, playerCards); 
+function playerPicksCard(shuffledDeck, playerCards, computerCards, score) {
+  playerHits(shuffledDeck, playerCards);
   updateScores(score, playerCards, computerCards);
   displayCards(playerCards, computerCards);
+}
+
+function playerTurn(shuffledDeck, playerCards, computerCards, score) {
+  let playerChoice = playerPrompt();
+  while (playerChoice[0] === HIT) {
+    playerPicksCard(shuffledDeck, playerCards, computerCards, score);
+    displayCards(playerCards, computerCards);
+    if (busted(PLAYER, score)) break;
+    playerChoice = playerPrompt();
+  }
 }
 
 function roundEndMsg(user, score) {
@@ -189,17 +201,18 @@ function roundEndMsg(user, score) {
 
   if (user === COMPUTER && busted(COMPUTER, score)) {
     console.log(`The computer ended up drawing over 21.`);
-  } 
+  }
 }
 
 function checkIfLost(user, score) {
-  if (user === PLAYER) return busted(PLAYER, score); 
-  if (user === COMPUTER) return busted(COMPUTER, score); 
+  if (user === PLAYER) return busted(PLAYER, score);
+  if (user === COMPUTER) return busted(COMPUTER, score);
+  return null;
 }
 
 function computerTurn(shuffledDeck, playerCards, computerCards, score) {
   while (score.computerScore < COMPUTER_MIN_STOPPING_SCORE) {
-    computerCards.push(shuffledDeck.pop()); 
+    computerCards.push(shuffledDeck.pop());
     updateScores(score, playerCards, computerCards);
   }
 }
@@ -215,47 +228,35 @@ function continueRestOfRound(shuffledDeck, playerCards, computerCards, score) {
   displayCards(playerCards, computerCards, REVEAL_ALL);
 }
 
+function playRound() {
+  // Initial setup of deck and relevant variables.
+  console.clear();
+  let shuffledDeck = initializeDeck();
+  let [playerCards, computerCards] = initializeEmptyHands();
+  let score = generateScoreBoard();
+  initialDealing(shuffledDeck, playerCards, computerCards);
+  updateScores(score, playerCards, computerCards);
+  displayCards(playerCards, computerCards);
 
-////////////////////
-// Main Programs
-////////////////////
-console.clear();
-let shuffledDeck = initializeDeck(); // generates randomized deck.
-let [playerCards, computerCards] = initializeEmptyHands();
-let score = generateScoreBoard();
-initialDealing(shuffledDeck, playerCards, computerCards); // initial dealing. 
-updateScores(score, playerCards, computerCards);
-displayCards(playerCards, computerCards); // display cards. 
-
-// Player turn 
-let playerChoice = playerPrompt();
-while (playerChoice[0] === HIT) {
+  // Player turn
   playerTurn(shuffledDeck, playerCards, computerCards, score);
   displayCards(playerCards, computerCards);
-  if (busted(PLAYER, score)) break; 
-  playerChoice = playerPrompt();
+
+  // Either end round bc playerScore > 21, or Computer turn.
+  if (checkIfLost(PLAYER, score)) {
+    playerLostFirst(playerCards, computerCards, score);
+  } else {
+    continueRestOfRound(shuffledDeck, playerCards, computerCards, score);
+    if (checkIfLost(COMPUTER, score)) roundEndMsg(COMPUTER, score);
+  }
+
+  // Decide winner; end of round.
+  let winner = decideWinner(score);
+  displayWinnerRound(winner, score);
 }
-
-displayCards(playerCards, computerCards); // clears user input
-
-if (checkIfLost(PLAYER, score)) {
-  playerLostFirst(playerCards, computerCards, score);
-} else {
-  // computer turn
-  continueRestOfRound(shuffledDeck, playerCards, computerCards, score);
-
-  if (checkIfLost(COMPUTER, score)) {
-    roundEndMsg(COMPUTER, score);
-  } 
-}
-
-let winner = decideWinner(score);
-displayWinnerRound(winner, score);
-
-
-
-
-
-
+////////////////////
+// Main Program
+////////////////////
+playRound();
 
 
