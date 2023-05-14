@@ -12,6 +12,8 @@ const REVEAL_ALL = true;
 const PLAYER_RESPONSES = ['s', 'stay', 'h', 'hit'];
 const HIGHEST_VALID_SCORE = 21;
 const HIT = 'h';
+const BEST_FIVE_WIN_SCORE = 3;
+const POSSIBLE_ANSWERS = ['y', 'yes', 'n', 'no'];
 
 const CARDS = [
   'A',
@@ -39,6 +41,27 @@ const SUITS = [
 ////////////////////
 // Helper Functions
 ////////////////////
+function welcomeMsg() {
+  console.clear(); 
+  console.log('Welcome to Twenty-One!');
+  console.log('You will play against the computer in a best of five match.');
+  console.log('Hit enter when you are ready to begin. Good luck :)');
+  readline.question();
+}
+
+function goodbyeMsg() {
+  console.log('Thank you for playing. We hope you enjoyed this silly game :)');
+}
+
+function displayScores(boxScore) {
+  console.log(`           _Score_ `);
+  console.log(`  Player  |   ${boxScore[PLAYER]}   |`);
+  console.log(`          |_______|`);
+  console.log(` Computer |   ${boxScore[COMPUTER]}   |`);
+  console.log(`          |_______|`);
+  console.log();
+}
+
 function initializeDeck() {
   let deck = makeDeck();
   shuffle(deck);
@@ -63,8 +86,9 @@ function shuffle(array) {
   }
 }
 
-function displayCards(playerCards, computerCards, revealAll = false) {
+function displayCards(playerCards, computerCards, boxScore, revealAll = false) {
   console.clear();
+  displayScores(boxScore);
 
   if (!revealAll) {
     let computerFirstCard = computerCards[0][1];
@@ -159,13 +183,14 @@ function decideWinner(score) {
 function displayWinnerRound(winner, score) {
   console.log(`Your final score: ${score.playerScore}`);
   console.log(`Computer final score: ${score.computerScore}.`);
+  console.log();
 
   if (winner === PLAYER) {
-    console.log('You won the game of twenty one. Congrats!');
+    console.log('You won this round.');
   } else if (winner === COMPUTER) {
-    console.log('The computer won the game!');
+    console.log('The computer won this round.');
   } else {
-    console.log(`Both of you got the same score of ${score.playerScore}! Wow, what are the odds?`);
+    console.log(`This round is a tie. Both of you got the same score of ${score.playerScore}! Wow, what are the odds?`);
   }
 }
 
@@ -173,17 +198,17 @@ function initializeEmptyHands() {
   return [[], []];
 }
 
-function playerPicksCard(shuffledDeck, playerCards, computerCards, score) {
+function playerPicksCard(shuffledDeck, playerCards, computerCards, score, boxScore) {
   playerHits(shuffledDeck, playerCards);
   updateScores(score, playerCards, computerCards);
-  displayCards(playerCards, computerCards);
+  displayCards(playerCards, computerCards, boxScore);
 }
 
-function playerTurn(shuffledDeck, playerCards, computerCards, score) {
+function playerTurn(shuffledDeck, playerCards, computerCards, score, boxScore) {
   let playerChoice = playerPrompt();
   while (playerChoice[0] === HIT) {
-    playerPicksCard(shuffledDeck, playerCards, computerCards, score);
-    displayCards(playerCards, computerCards);
+    playerPicksCard(shuffledDeck, playerCards, computerCards, score, boxScore);
+    displayCards(playerCards, computerCards, boxScore);
     if (busted(PLAYER, score)) break;
     playerChoice = playerPrompt();
   }
@@ -194,7 +219,7 @@ function roundEndMsg(user, score) {
     if (busted(PLAYER, score)) {
       console.log(`You ended up drawing over 21.`);
     } else {
-      console.log(`You chose to stay! Press enter to see what the computer decides.`);
+      console.log(`You chose to stay. Press enter to see what the computer decides.`);
       readline.question();
     }
   }
@@ -217,18 +242,18 @@ function computerTurn(shuffledDeck, playerCards, computerCards, score) {
   }
 }
 
-function playerLostFirst(playerCards, computerCards, score) {
-  displayCards(playerCards, computerCards, REVEAL_ALL);
+function playerLostFirst(playerCards, computerCards, score, boxScore) {
+  displayCards(playerCards, computerCards, boxScore, REVEAL_ALL);
   roundEndMsg(PLAYER, score);
 }
 
-function continueRestOfRound(shuffledDeck, playerCards, computerCards, score) {
+function continueRestOfRound(shuffledDeck, playerCards, computerCards, score, boxScore) {
   roundEndMsg(PLAYER, score);
   computerTurn(shuffledDeck, playerCards, computerCards, score);
-  displayCards(playerCards, computerCards, REVEAL_ALL);
+  displayCards(playerCards, computerCards, boxScore, REVEAL_ALL);
 }
 
-function playRound() {
+function playRound(boxScore) {
   // Initial setup of deck and relevant variables.
   console.clear();
   let shuffledDeck = initializeDeck();
@@ -236,27 +261,82 @@ function playRound() {
   let score = generateScoreBoard();
   initialDealing(shuffledDeck, playerCards, computerCards);
   updateScores(score, playerCards, computerCards);
-  displayCards(playerCards, computerCards);
+  displayCards(playerCards, computerCards, boxScore);
 
   // Player turn
-  playerTurn(shuffledDeck, playerCards, computerCards, score);
-  displayCards(playerCards, computerCards);
+  playerTurn(shuffledDeck, playerCards, computerCards, score, boxScore);
+  displayCards(playerCards, computerCards, boxScore);
 
   // Either end round bc playerScore > 21, or Computer turn.
   if (checkIfLost(PLAYER, score)) {
-    playerLostFirst(playerCards, computerCards, score);
+    playerLostFirst(playerCards, computerCards, score, boxScore);
   } else {
-    continueRestOfRound(shuffledDeck, playerCards, computerCards, score);
+    continueRestOfRound(shuffledDeck, playerCards, computerCards, score, boxScore);
     if (checkIfLost(COMPUTER, score)) roundEndMsg(COMPUTER, score);
   }
 
   // Decide winner; end of round.
   let winner = decideWinner(score);
   displayWinnerRound(winner, score);
+
+  // Update box score 
+  boxScore[winner] += 1;
+
+  // Prompt
+  readline.question('\nPress enter to move on to the next round...');
 }
+
+function detectBestOfFiveWinner(boxScore) {
+  return boxScore[PLAYER] >= BEST_FIVE_WIN_SCORE || boxScore[COMPUTER] >= BEST_FIVE_WIN_SCORE;
+}
+
+function displayBestOfFiveMsg(boxScore) {
+  console.log(`You finished with a tally of ${boxScore[PLAYER]}.`);
+  console.log(`The computer finished with a tally of ${boxScore[COMPUTER]}`);
+  console.log();
+
+  if (boxScore[PLAYER] >= BEST_FIVE_WIN_SCORE) console.log(`Congrats on winning the overall best of give!`)
+  if (boxScore[COMPUTER] >= BEST_FIVE_WIN_SCORE) console.log(`The computer won the best of five game!`);
+  console.log();
+}
+
+function playAgain() {
+  console.log('Play again? (y or n)');
+  let answer = readline.question().toLowerCase();
+
+  while (!POSSIBLE_ANSWERS.includes(answer)) {
+    console.log('Invalid response. Please try again. (y or n)');
+    answer = readline.question().toLowerCase();
+  }
+
+  if (answer === 'y' || answer === 'yes') return true;
+
+  console.clear();
+  return false;
+}
+
+function bestOfFive() {
+  while (true) {
+    const boxScore = {'0':0, '1':0}
+  
+    while (true) {
+      playRound(boxScore);
+      if (detectBestOfFiveWinner(boxScore)) {
+        displayBestOfFiveMsg(boxScore);
+        break;
+      }
+    }
+
+    if (!playAgain()) break;
+  }
+}
+
 ////////////////////
 // Main Program
 ////////////////////
-playRound();
+welcomeMsg(); 
+bestOfFive();
+goodbyeMsg();
+
 
 
