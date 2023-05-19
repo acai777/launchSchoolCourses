@@ -57,8 +57,7 @@ function goodbyeMsg() {
 function displayScores(boxScore) {
   console.log(`           _Score_ `);
   console.log(`  Player  |   ${boxScore[PLAYER]}   |`);
-  console.log(`          |_______|`);
-  console.log(` Computer |   ${boxScore[COMPUTER]}   |`);
+  console.log(`          |_______|`);  console.log(` Computer |   ${boxScore[COMPUTER]}   |`);
   console.log(`          |_______|`);
   console.log();
 }
