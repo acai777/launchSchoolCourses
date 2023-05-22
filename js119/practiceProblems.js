@@ -534,6 +534,84 @@ function closestNumbers(arr) {
 // console.log(closestNumbers([19, 25, 32, 4, 27, 16])); // [25, 27]
 // console.log(closestNumbers([12, 7, 17]));             // [12, 7]
 
-// Start the fifth question
+// Write a function that takes a string as an argument and
+// returns the character that occurs least often in the
+// given string. If there are multiple characters with the
+// same lowest number of occurrences, then return the one
+// that appears first in the string. When counting
+// characters, consider uppercase and lowercase versions to
+// be the same.
 
+// Examples:
+
+// console.log(leastCommonChar("Hello World") === "h");
+// console.log(leastCommonChar("Peter Piper picked a peck of pickled peppers") ===
+//                             "t");
+// console.log(leastCommonChar("Mississippi") === "m");
+// console.log(leastCommonChar("Happy birthday!") === ' ');
+// console.log(leastCommonChar("aaaaaAAAA") === 'a');
+
+// The tests above should each log "true".
+
+/////////////////////
+// 5
+/////////////////////
+/*
+12:37pm - 12:55pm. Took 18 minutes. 
+input: string
+output: string that is one character long. it represents the char that appears the least in the input string. 
+
+rules: 
+- case insensitive e.g., 'A' is equivalent to 'a' when counting
+- we get the count of ALL characters. Not just the alphabetical ones. For example, the empty space char ' ' counts. 
+- if there are multiple characters with the same lowest number of occurrences, take the one that appears first. 
+
+Approach: 
+let orderSeen = empty array. For each char we see, if the char has not been shown, add to orderSeen from the end. 
+
+let charCount = collection to hold the count of each char we see. 
+
+Convert to all lower case. 
+Start counting from left to right of string. 
+Say we are at index i. 
+Get char[i]. 
+Check if char[i] in orderSeen. If it isn't, add the character. 
+Check if char[i] is in the charCount. If it isn't, add it with a count of 1. If it is, increment the count already there by one. 
+
+At the end, get the char with the smallest counts. If multiple, look into orderSeen to see which char comes first. Return that one. 
+*/
+
+function leastCommonChar(str) {
+  str = str.toLowerCase(); 
+  let orderSeen = []; 
+  let charCount = {}; 
+
+  for (let idx = 0; idx < str.length; idx += 1) {
+    let char = str[idx];
+
+    if (!orderSeen.includes(char)) {
+      orderSeen.push(char); 
+    }
+
+    charCount[char] = charCount[char] || 0; 
+    charCount[char] += 1; 
+  }
+
+  let minOccurCount = Math.min(...Object.values(charCount)); 
+  let minOccurChars = Object.entries(charCount).filter(nestedArr => nestedArr[1] === minOccurCount).map(nestedArr => nestedArr[0]); 
+
+  for (let index = 0; index < orderSeen.length; index += 1) {
+    if (minOccurChars.includes(orderSeen[index])) {
+      return orderSeen[index]; 
+    }
+  }
+}
+
+
+// console.log(leastCommonChar("Hello World") === "h");
+// console.log(leastCommonChar("Peter Piper picked a peck of pickled peppers") ===
+//                             "t");
+// console.log(leastCommonChar("Mississippi") === "m");
+// console.log(leastCommonChar("Happy birthday!") === ' ');
+// console.log(leastCommonChar("aaaaaAAAA") === 'a');
 
