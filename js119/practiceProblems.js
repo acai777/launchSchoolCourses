@@ -615,3 +615,290 @@ function leastCommonChar(str) {
 // console.log(leastCommonChar("Happy birthday!") === ' ');
 // console.log(leastCommonChar("aaaaaAAAA") === 'a');
 
+function duplicates(array){
+  if (array.length <= 1) {
+    return 0; 
+  }
+  
+  let countOfChar = {}; 
+  
+  array.forEach(num => {
+    countOfChar[num] = countOfChar[num] || 0; 
+    countOfChar[num] += 1; 
+  }); 
+  
+  let temp = Object.values(countOfChar).filter(count => count >= 2);
+  
+  let sum = 0; 
+  temp.forEach(count => {
+    sum += Math.floor(count / 2);
+  }); 
+
+  return sum; 
+}
+
+///////////////////////////////
+// MORE PROBLEMS FROM CODEWARS
+///////////////////////////////
+
+// Repeated substrings
+// https://www.codewars.com/kata/5491689aff74b9b292000334/train/javascript 
+function f(s) {
+  let lengths = s.length; 
+  
+  for (let len = 1; len <= lengths; len += 1) {
+    let subStringsArray = getAllSubstrings(s, len);
+    let numberToRepeat = (lengths / len); 
+    
+    if (numberToRepeat % 1 !== 0) {
+      continue; 
+    }
+    
+    for (let ind = 0; ind < subStringsArray.length; ind += 1) {
+      if (subStringsArray[ind].repeat(numberToRepeat) === s) {
+        return [subStringsArray[ind], numberToRepeat]
+      }
+    }
+  }
+}
+
+function getAllSubstrings(s, len) {
+  let arrOfSubstrings = []; 
+  
+  for (let ind = 0; ind < s.length - len + 1; ind += 1) {
+    let subStr = s.slice(ind, ind + len);
+    arrOfSubstrings.push(subStr);
+  }
+  
+  return arrOfSubstrings;
+}
+
+/*
+input: string 
+output: array of two numbers: substring t, 
+and k indicating the count of the substring t needed to form the 
+entire input string. 
+
+rules: 
+- we want to minimize the substring t, and maximize the number k, 
+such that the entire string s is equal to t repeated k times. 
+- a "substring" can be the entire string itself, in which case 
+you only repeat once. 
+
+approach: 
+
+have a helper function which gets all the substrings of length X, 
+where you specify X. So the helper fcn takes in two inputs, the 
+string and the length of the substring you are interested in. 
+
+In main program, first obtain all substrings of length 1. 
+See if any can satisfy the original string length s.length times. 
+If not, repeat the process; obtain all substrings of length 2. 
+See if any can form the string when repeated (s.length / 2) times. 
+If any do, return that substring and the count. 
+
+*/
+
+// Scramblies
+function scramble(str1, str2) {
+  let str1Arr = str1.split('');
+  for (let index = 0; index < str2.length; index += 1) {
+    let char = str2[index];
+    
+    if (str1Arr.includes(char)) {
+      let indexOfChar = str1Arr.indexOf(char);
+      str1Arr.splice(indexOfChar, 1);
+    } else {
+      return false;
+    }
+  }
+  
+  return true; 
+}
+
+// Largest product in a series 
+// https://www.codewars.com/kata/529872bdd0f550a06b00026e/train/javascript
+function greatestProduct(input) {
+  let currMax = -Infinity;
+  for (let index = 0; index < input.length - 5 + 1; index += 1) {
+    let currSubstr = input.slice(index, index + 5);
+    let currProduct = productEachNum(currSubstr); 
+    currMax = Math.max(currMax, currProduct); 
+  }
+  
+  return currMax;
+}
+
+function productEachNum(currSubstr) {
+  return currSubstr
+    .split("")
+    .map(num => Number(num))
+    .reduce((acc, currNum) => acc * currNum, 1); 
+}
+
+// Find the unique number
+// https://www.codewars.com/kata/585d7d5adb20cf33cb000235/solutions/javascript
+function findUniq2(arr) {
+  let [first, second, third] = arr.slice(0, 3);
+
+  if (!(first === second && second === third)) {
+    if (first === second) {
+      return third;
+    } else if (second === third) {
+      return first;
+    } else {
+      return second;
+    }
+  }
+  
+  let duplicate = first; 
+  let strLength = arr.length; 
+  let checkSum = duplicate * strLength; 
+  let actualSum = arr.reduce((acc, currVal) => acc + currVal, 0);
+  
+  if (checkSum < actualSum) {
+    return (actualSum - checkSum) + duplicate;
+  } else {
+    return duplicate - (checkSum - actualSum);
+  }
+}
+
+function findUniq(arr) {
+  let [first, second, third] = arr.slice(0, 3);
+
+  if (!(first === second && second === third)) {
+    if (first === second) {
+      return third;
+    } else if (second === third) {
+      return first;
+    } else {
+      return second;
+    }
+  }
+  
+  let duplicate = first; 
+  
+  for (let i = 3; i < arr.length; i += 1) {
+    if (arr[i] !== duplicate) {
+      return arr[i];
+    }
+  }
+}
+
+
+/*
+input: array of  numbers
+output: number that is the unique one in the array. 
+
+rules: 
+- guaranteed the array contains at least 3 numbers. 
+
+Approach 1: 
+- base case for if the first three numbers
+- if all three equal each other, know the number seen is the duplicate one
+- if not, determine which is the unique number and return that number. 
+
+assuming all the first three are equal, set the duplicate num = `duplicate`
+iterate through remaining elements of array until you see the unique.
+return the unique num. 
+
+Approach 2 (faster/"clever" approach):
+- base case for if the first three numbers
+- if all three equal each other, know the number seen is the duplicate one
+- if not, determine which is the unique number and return that number. 
+
+set the duplicate num = `duplicate`
+Determine the length of the array, `length` 
+let checkSum = `duplicate` * `length`. 
+Find the actual sum of the array i.e., `actualSum`. 
+Find the difference between the two. Do some logic to determine 
+what the unique number's value is. 
+
+Go ahead with approach 2. 
+Update: approach 2 won't work due to imprecision. Code up first method.
+
+*/
+
+  
+// Sum of pairs (method timed out for you) 
+// https://www.codewars.com/kata/54d81488b981293527000c8f/train/javascript
+function sumPairs(ints, s) {
+  let currIndices; 
+  for (let firstNumIndex = 0; firstNumIndex < ints.length - 1; firstNumIndex += 1) {
+    for (let secondNumIndex = firstNumIndex + 1; secondNumIndex < ints.length; secondNumIndex += 1) {
+      let currSum = ints[firstNumIndex] + ints[secondNumIndex]; 
+      if (currSum === s) {
+        currIndices = currIndices || [firstNumIndex, secondNumIndex]
+        
+        if (currIndices[1] >= secondNumIndex) {
+          currIndices = [ints[firstNumIndex], ints[secondNumIndex]];
+        }
+      } 
+    }
+  }
+  
+  console.log(currIndices)
+  return currIndices;
+}
+
+
+/* 
+Input: 
+1) Array of integers
+2) a number representing the sum `s`
+
+Output: an array of the indices of the first elements whose sum equals `s`
+
+Rules:
+- If there are multiple answers, return the first two values 
+(from left to right) that add up to the sum. 
+- If there are two or more pairs with the required sum, 
+the pair whose second element has the smallest index is the solution.
+
+*/
+
+// Make weird case question
+// https://www.codewars.com/kata/52b757663a95b11b3d00062d/solutions/javascript?filter=me&sort=best_practice&invalids=false
+function toWeirdCase(string){
+  let stringArr = string.split(" ");
+  
+  stringArr.forEach((word, index) => { 
+    word = makeWeird(word);
+    stringArr[index] = word;
+  });
+  
+  return stringArr.join(" ");
+}
+
+function makeWeird(word) {
+  for (let index = 0; index < word.length; index += 1) {
+    if (index % 2 === 0) {
+      word = word.slice(0, index) + word[index].toUpperCase() + word.slice(index + 1);
+    } else {
+      word = word.slice(0, index) + word[index].toLowerCase() + word.slice(index + 1);
+    }
+  }
+  
+  return word;
+}
+
+/*
+Input: string
+Output: string, but in the weird case format 
+
+Rules: 
+- You must weird case EACH word. For each word, the first char will
+be uppercased, the next char will be lowercased, the subsequent will
+be uppercased again, and so on. 
+- words are separated by one empty space
+- you can assume that the input string will only consist of 
+alphabetical characters and spaces. 
+
+Approach: 
+-write helper function to do the weird case for an input word
+-Split string into array with the proper delimitor. 
+-Mutate the array; for each element, put the weird case format 
+word in it instead (using the helper function). 
+-join the array together (string)
+-return the string
+*/
