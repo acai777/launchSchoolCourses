@@ -902,3 +902,21 @@ word in it instead (using the helper function).
 -join the array together (string)
 -return the string
 */
+
+function fibonacci(n) {
+  let currNums = [1, 1];
+
+  for (let currInd = 3; currInd <= n; currInd += 1) {
+    currNums = [currNums[1], currNums[0] + currNums[1]];
+  }
+
+  return currNums[1];
+}
+
+console.log(fibonacci(1))
+console.log(fibonacci(2))
+console.log(fibonacci(3))
+console.log(fibonacci(4))
+console.log(fibonacci(5))
+console.log(fibonacci(6))
+console.log(fibonacci(7))
