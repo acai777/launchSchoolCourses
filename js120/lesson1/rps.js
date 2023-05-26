@@ -1,10 +1,12 @@
 const readline = require('readline-sync');
-const VALID_RPS_CHOICES = ['rock', 'paper', 'scissors', 'r', 'p', 's'];
+const DEFAULT_RANDOM = '';
+const POSSIBLE_USER_INPUT = ['rock', 'paper', 'scissors', 'r', 'p', 's', DEFAULT_RANDOM];
+const VALID_RPS_CHOICES = ['rock', 'paper', 'scissors'];
 const ONE_CHAR_MAP_TO_FULL_WORD = {r: 'rock', p: 'paper', s: 'scissors'};
 const VALID_PLAY_AGAIN_CHOICES = ['y', 'n', 'yes', 'no'];
-PLAYER = 0;
-COMPUTER = 1;
-TIE = 2
+const PLAYER = 0;
+const COMPUTER = 1;
+const TIE = 2
 const GAMES_TO_WIN = 3;
 
 function createPlayer() {
@@ -22,15 +24,23 @@ function createHuman() {
 
       while (true) {
         console.log('Please choose what you would like to select: rock, paper, or scissors (r/p/s)');
+        console.log("If you press enter without selecting, we will randomly choose for you.");
         choice = readline.question().toLowerCase();
-        if (VALID_RPS_CHOICES.includes(choice)) break;
+        if (POSSIBLE_USER_INPUT.includes(choice)) break;
         console.log(`Sorry, that is an invalid choice.`);
       }
 
-      if (choice.length === 1) choice = ONE_CHAR_MAP_TO_FULL_WORD[choice]; // allow for single character responses
+      if (choice.length === 1) choice = ONE_CHAR_MAP_TO_FULL_WORD[choice]; 
+        // allow for single character responses
+      if (choice.length === 0) choice = this.chooseAtRandom();
+        // choose at random for player if they press enter
       this.move = choice;
     },
 
+    chooseAtRandom() {
+      let randomIndex = Math.floor(Math.random() * VALID_RPS_CHOICES.length);
+      return VALID_RPS_CHOICES[randomIndex];
+    }
   };
 
   return Object.assign(playerObject, humanObject);
@@ -40,9 +50,8 @@ function createComputer() {
   let playerObject = createPlayer();
   let computerObject = {
     choose() {
-      const choices = ['rock', 'paper', 'scissors'];
-      let randomIndex = Math.floor(Math.random() * choices.length);
-      this.move = choices[randomIndex];
+      let randomIndex = Math.floor(Math.random() * VALID_RPS_CHOICES.length);
+      this.move = VALID_RPS_CHOICES[randomIndex];
     }
   };
 
@@ -139,7 +148,7 @@ const RPSGame = {
     if (playerScore > computerScore) {
       console.log('You won the overall match. Good job!');
     } else {
-      console.log('The computer won the overall match.')
+      console.log('The computer won the overall match!')
     }
   },
 
@@ -166,8 +175,11 @@ const RPSGame = {
   play() {
     this.displayWelcomeMessage();
 
+    // Each iteration of this while loop is best of five match.
     while (true) {
-      this.displayScores(); // put this here to maintain the score board at all times
+      this.displayScores(); 
+
+      // Each iteration of this while loop is a round.
       while (true) {
         this.human.choose();
         this.computer.choose();
