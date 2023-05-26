@@ -23,6 +23,14 @@ const RULES = [
   'Rock breaks scissors',
 ];
 
+const WINNING_COMBOS = {
+  rock:    ['scissors', 'lizard'],
+  paper:    ['rock', 'spock'],
+  scissors:   ['paper', 'lizard'],
+  lizard:    ['paper', 'spock'],
+  spock:   ['rock', 'scissors'],
+};
+
 function createPlayer() {
   return {
     move: null,
@@ -119,16 +127,7 @@ const RPSGame = {
     let humanMove = this.human.move;
     let computerMove = this.computer.move;
 
-    if ((humanMove === 'rock' && computerMove === 'scissors') ||
-        (humanMove === 'rock' && computerMove === 'lizard') ||
-        (humanMove === 'paper' && computerMove === 'rock') ||
-        (humanMove === 'paper' && computerMove === 'spock') ||
-        (humanMove === 'scissors' && computerMove === 'paper') ||
-        (humanMove === 'scissors' && computerMove === 'lizard') ||
-        (humanMove === 'lizard' && computerMove === 'paper') ||
-        (humanMove === 'lizard' && computerMove === 'spock') ||
-        (humanMove === 'spock' && computerMove === 'rock') ||
-        (humanMove === 'spock' && computerMove === 'scissors')) {
+    if (WINNING_COMBOS[humanMove].includes(computerMove)) {
       return PLAYER;
     } else if (humanMove === computerMove) {
       return TIE;
