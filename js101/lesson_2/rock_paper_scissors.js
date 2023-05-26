@@ -83,9 +83,9 @@ function winner(choice, computerChoice) {
   if (playerWins(choice, computerChoice)) {
     return RESULTS[PLAYER_WIN_INDEX];
   } else if (choice === computerChoice) {
-    return RESULTS[COMPUTER_WIN_INDEX];
+    return RESULTS[TIE_INDEX]; 
   } else {
-    return RESULTS[TIE_INDEX];
+    return RESULTS[COMPUTER_WIN_INDEX];
   }
 }
 
