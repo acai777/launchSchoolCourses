@@ -26,6 +26,7 @@ function createHuman() {
       if (choice.length === 1) choice = ONE_CHAR_MAP_TO_FULL_WORD[choice]; // allow for single character responses
       this.move = choice;
     },
+
   };
 
   return Object.assign(playerObject, humanObject);
@@ -88,12 +89,14 @@ const RPSGame = {
   },
 
   play() {
+    console.clear();
     this.displayWelcomeMessage();
     while (true) {
       this.human.choose();
       this.computer.choose();
       this.displayWinner();
       if (!this.playAgain()) break;
+      console.clear();
     }
 
     this.displayGoodbyeMessage();
