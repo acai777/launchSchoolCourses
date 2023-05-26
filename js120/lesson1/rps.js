@@ -6,6 +6,7 @@ const VALID_PLAY_AGAIN_CHOICES = ['y', 'n', 'yes', 'no'];
 function createPlayer() {
   return {
     move: null,
+    score: 0,
   };
 }
 
@@ -57,7 +58,19 @@ const RPSGame = {
     console.log('Thanks for playing Rock, Paper, and Scissors. Goodbye!');
   },
 
+  displayScores() {
+    console.log();
+    console.log(`           _Score_ `);
+    console.log(`  Player  |   ${this.human.score}   |`);
+    console.log(`          |_______|`);
+    console.log(` Computer |   ${this.computer.score}   |`);
+    console.log(`          |_______|`);
+    console.log();
+  }, 
+
   displayWinner() {
+    this.displayScores(); // call displayScores from within to display score always
+
     let humanMove = this.human.move;
     let computerMove = this.computer.move;
 
@@ -91,12 +104,15 @@ const RPSGame = {
   play() {
     console.clear();
     this.displayWelcomeMessage();
+    this.displayScores();
     while (true) {
       this.human.choose();
       this.computer.choose();
+      console.clear();
       this.displayWinner();
       if (!this.playAgain()) break;
-      console.clear();
+      console.clear(); 
+      this.displayScores();
     }
 
     this.displayGoodbyeMessage();
