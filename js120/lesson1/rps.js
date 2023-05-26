@@ -1,8 +1,8 @@
 const readline = require('readline-sync');
 const DEFAULT_RANDOM = '';
-const POSSIBLE_USER_INPUT = ['rock', 'paper', 'scissors', 'r', 'p', 's', DEFAULT_RANDOM];
-const VALID_RPS_CHOICES = ['rock', 'paper', 'scissors'];
-const ONE_CHAR_MAP_TO_FULL_WORD = {r: 'rock', p: 'paper', s: 'scissors'};
+const POSSIBLE_USER_INPUT = ['rock', 'paper', 'scissors', 'spock', 'lizard', 'r', 'p', 'sc', 'sp', 'l', DEFAULT_RANDOM];
+const VALID_RPS_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
+const CHAR_MAP_TO_FULL_WORD = {r: 'rock', p: 'paper', s: 'scissors'};
 const VALID_PLAY_AGAIN_CHOICES = ['y', 'n', 'yes', 'no'];
 const PLAYER = 0;
 const COMPUTER = 1;
@@ -30,10 +30,10 @@ function createHuman() {
         console.log(`Sorry, that is an invalid choice.`);
       }
 
-      if (choice.length === 1) choice = ONE_CHAR_MAP_TO_FULL_WORD[choice]; 
-        // allow for single character responses
+      if (choice.length === 1 || choice.length === 2) choice = CHAR_MAP_TO_FULL_WORD[choice]; 
       if (choice.length === 0) choice = this.chooseAtRandom();
         // choose at random for player if they press enter
+
       this.move = choice;
     },
 
