@@ -59,6 +59,9 @@ const RPSGame = {
 
   displayWelcomeMessage() {
     console.log('Welcome to Rock, Paper, and Scissors!');
+    console.log(`Play against the computer and try win in a best of five game.`);
+    console.log('Press enter to get started!')
+    readline.question(); 
   },
 
   displayGoodbyeMessage() {
