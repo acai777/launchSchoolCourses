@@ -2,6 +2,9 @@ const readline = require('readline-sync');
 const VALID_RPS_CHOICES = ['rock', 'paper', 'scissors', 'r', 'p', 's'];
 const ONE_CHAR_MAP_TO_FULL_WORD = {r: 'rock', p: 'paper', s: 'scissors'};
 const VALID_PLAY_AGAIN_CHOICES = ['y', 'n', 'yes', 'no'];
+PLAYER = 0;
+COMPUTER = 1;
+TIE = 2
 
 function createPlayer() {
   return {
@@ -68,22 +71,36 @@ const RPSGame = {
     console.log();
   }, 
 
+  decideWinner() {
+    let humanMove = this.human.move; 
+    let computerMove = this.computer.move; 
+
+    if ((humanMove === 'rock' && computerMove === 'scissors') ||
+        (humanMove === 'paper' && computerMove === 'rock') ||
+        (humanMove === 'scissors' && computerMove === 'paper')) {
+      return PLAYER;
+    } else if ((humanMove === 'rock' && computerMove === 'paper') ||
+    (humanMove === 'paper' && computerMove === 'scissors') ||
+    (humanMove === 'scissors' && computerMove === 'rock')) {
+      return COMPUTER;
+    } else {
+      return TIE; 
+    }
+  },
+
   displayWinner() {
     this.displayScores(); // call displayScores from within to display score always
 
     let humanMove = this.human.move;
     let computerMove = this.computer.move;
+    let winner = decideWinner(); 
 
     console.log(`You chose: ${humanMove}`);
     console.log(`The computer chose: ${computerMove}`);
 
-    if ((humanMove === 'rock' && computerMove === 'scissors') ||
-        (humanMove === 'paper' && computerMove === 'rock') ||
-        (humanMove === 'scissors' && computerMove === 'paper')) {
+    if (winner === PLAYER) {
       console.log('You win!');
-    } else if ((humanMove === 'rock' && computerMove === 'paper') ||
-              (humanMove === 'paper' && computerMove === 'scissors') ||
-              (humanMove === 'scissors' && computerMove === 'rock')) {
+    } else if (winner === COMPUTER) {
       console.log('Computer wins!');
     } else {
       console.log("It's a tie");
@@ -109,6 +126,7 @@ const RPSGame = {
       this.human.choose();
       this.computer.choose();
       console.clear();
+      this.updateScore(); 
       this.displayWinner();
       if (!this.playAgain()) break;
       console.clear(); 
