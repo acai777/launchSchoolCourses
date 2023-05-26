@@ -5,6 +5,7 @@ const VALID_PLAY_AGAIN_CHOICES = ['y', 'n', 'yes', 'no'];
 PLAYER = 0;
 COMPUTER = 1;
 TIE = 2
+const GAMES_TO_WIN = 3;
 
 function createPlayer() {
   return {
@@ -58,18 +59,15 @@ const RPSGame = {
   score: createScore(),
 
   displayWelcomeMessage() {
+    console.clear();
     console.log('Welcome to Rock, Paper, and Scissors!');
     console.log(`Play against the computer and try win in a best of five game.`);
-    console.log('Press enter to get started!')
+    console.log('Ready? Press enter to get started!')
     readline.question(); 
   },
 
-  displayGoodbyeMessage() {
-    console.log('Thanks for playing Rock, Paper, and Scissors. Goodbye!');
-  },
-
   displayScores() {
-    console.log();
+    console.clear();
     console.log(`           _Score_ `);
     console.log(`  Player  |   ${this.score[PLAYER]}   |`);
     console.log(`          |_______|`);
@@ -105,7 +103,7 @@ const RPSGame = {
     }
   },
 
-  displayWinner() {
+  displayRoundWinner() {
     this.displayScores(); // call displayScores from within to display score always
 
     let humanMove = this.human.move;
@@ -116,11 +114,32 @@ const RPSGame = {
     console.log(`The computer chose: ${computerMove}`);
 
     if (winner === PLAYER) {
-      console.log('You win!');
+      console.log('You win this round.');
     } else if (winner === COMPUTER) {
-      console.log('Computer wins!');
+      console.log('Computer wins this round.');
     } else {
-      console.log("It's a tie");
+      console.log("This round is a tie.");
+    }
+  },
+
+  promptUser() {
+    console.log(`Press enter to move on to the next round.`);
+    readline.question();
+  }, 
+
+  someoneWon() {
+    let maxScore = Math.max(...this.score);
+    return maxScore === GAMES_TO_WIN;
+  },
+
+  displayOverallWinner() {
+    let playerScore = this.score[PLAYER];
+    let computerScore = this.score[COMPUTER];
+
+    if (playerScore > computerScore) {
+      console.log('You won the overall match. Good job!');
+    } else {
+      console.log('The computer won the overall match.')
     }
   },
 
@@ -135,19 +154,33 @@ const RPSGame = {
     return answer[0] === 'y';
   },
 
-  play() {
+  clearScore() {
+    this.score = createScore(); 
+  },
+
+  displayGoodbyeMessage() {
     console.clear();
+    console.log('Thanks for playing Rock, Paper, and Scissors. Goodbye :)');
+  },
+
+  play() {
     this.displayWelcomeMessage();
-    this.displayScores();
+
     while (true) {
-      this.human.choose();
-      this.computer.choose();
-      console.clear();
-      this.updateScore(); 
-      this.displayWinner();
+      this.displayScores(); // put this here to maintain the score board at all times
+      while (true) {
+        this.human.choose();
+        this.computer.choose();
+        this.updateScore(); 
+        this.displayRoundWinner();
+        if (this.someoneWon() === true) break; 
+        this.promptUser();
+        this.displayScores();
+      }
+
+      this.displayOverallWinner(); 
       if (!this.playAgain()) break;
-      console.clear(); 
-      this.displayScores();
+      this.clearScore(); 
     }
 
     this.displayGoodbyeMessage();
