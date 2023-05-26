@@ -9,7 +9,6 @@ TIE = 2
 function createPlayer() {
   return {
     move: null,
-    score: 0,
   };
 }
 
@@ -49,9 +48,14 @@ function createComputer() {
   return Object.assign(playerObject, computerObject);
 }
 
+function createScore() {
+  return [0, 0];
+}
+
 const RPSGame = {
   human: createHuman(),
   computer: createComputer(),
+  score: createScore(),
 
   displayWelcomeMessage() {
     console.log('Welcome to Rock, Paper, and Scissors!');
@@ -64,12 +68,22 @@ const RPSGame = {
   displayScores() {
     console.log();
     console.log(`           _Score_ `);
-    console.log(`  Player  |   ${this.human.score}   |`);
+    console.log(`  Player  |   ${this.score[PLAYER]}   |`);
     console.log(`          |_______|`);
-    console.log(` Computer |   ${this.computer.score}   |`);
+    console.log(` Computer |   ${this.score[COMPUTER]}   |`);
     console.log(`          |_______|`);
     console.log();
   }, 
+
+  updateScore() {
+    let currScore = this.score; 
+    let winner = this.decideWinner(); 
+    if (winner === PLAYER) {
+      currScore[PLAYER] += 1; 
+    } else if (winner === COMPUTER) {
+      currScore[COMPUTER] += 1; 
+    } 
+  },
 
   decideWinner() {
     let humanMove = this.human.move; 
@@ -93,7 +107,7 @@ const RPSGame = {
 
     let humanMove = this.human.move;
     let computerMove = this.computer.move;
-    let winner = decideWinner(); 
+    let winner = this.decideWinner(); 
 
     console.log(`You chose: ${humanMove}`);
     console.log(`The computer chose: ${computerMove}`);
