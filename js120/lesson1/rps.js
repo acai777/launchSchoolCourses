@@ -119,15 +119,20 @@ const RPSGame = {
     let computerMove = this.computer.move; 
 
     if ((humanMove === 'rock' && computerMove === 'scissors') ||
+        (humanMove === 'rock' && computerMove === 'lizard') ||
         (humanMove === 'paper' && computerMove === 'rock') ||
-        (humanMove === 'scissors' && computerMove === 'paper')) {
+        (humanMove === 'paper' && computerMove === 'spock') ||
+        (humanMove === 'scissors' && computerMove === 'paper') ||
+        (humanMove === 'scissors' && computerMove === 'lizard') ||
+        (humanMove === 'lizard' && computerMove === 'paper') ||
+        (humanMove === 'lizard' && computerMove === 'spock') ||
+        (humanMove === 'spock' && computerMove === 'rock') ||
+        (humanMove === 'spock' && computerMove === 'scissors')) {
       return PLAYER;
-    } else if ((humanMove === 'rock' && computerMove === 'paper') ||
-    (humanMove === 'paper' && computerMove === 'scissors') ||
-    (humanMove === 'scissors' && computerMove === 'rock')) {
-      return COMPUTER;
+    } else if (humanMove === computerMove) {
+      return TIE;
     } else {
-      return TIE; 
+      return COMPUTER; 
     }
   },
 
