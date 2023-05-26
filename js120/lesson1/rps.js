@@ -1,13 +1,27 @@
 const readline = require('readline-sync');
 const DEFAULT_RANDOM = '';
 const POSSIBLE_USER_INPUT = ['rock', 'paper', 'scissors', 'spock', 'lizard', 'r', 'p', 'sc', 'sp', 'l', DEFAULT_RANDOM];
+const DISPLAY_CHOICES_USER = ['rock (r)', 'paper (p)', 'scissors (sc)', 'spock (sp)', 'lizard (l)'];
 const VALID_RPS_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
-const CHAR_MAP_TO_FULL_WORD = {r: 'rock', p: 'paper', s: 'scissors'};
+const CHAR_MAP_TO_FULL_WORD = {r: 'rock', p: 'paper', sc: 'scissors', l: 'lizard', sp: 'spock'};
 const VALID_PLAY_AGAIN_CHOICES = ['y', 'n', 'yes', 'no'];
 const PLAYER = 0;
 const COMPUTER = 1;
 const TIE = 2
 const GAMES_TO_WIN = 3;
+
+const RULES = [
+  'Scissors cut paper',
+  'Paper covers rock',
+  'Rock crushes lizard',
+  'Lizard poisons Spock',
+  'Spock smashes (or melts) scissors',
+  'Scissors decapitate lizard',
+  'Lizard eats paper',
+  'Paper disproves Spock',
+  'Spock vaporizes rock',
+  'Rock breaks scissors',
+];
 
 function createPlayer() {
   return {
@@ -23,7 +37,7 @@ function createHuman() {
       let choice;
 
       while (true) {
-        console.log('Please choose what you would like to select: rock, paper, or scissors (r/p/s)');
+        console.log(`Choose one: ${DISPLAY_CHOICES_USER.join(', ')}`);
         console.log("If you press enter without selecting, we will randomly choose for you.");
         choice = readline.question().toLowerCase();
         if (POSSIBLE_USER_INPUT.includes(choice)) break;
@@ -69,8 +83,13 @@ const RPSGame = {
 
   displayWelcomeMessage() {
     console.clear();
-    console.log('Welcome to Rock, Paper, and Scissors!');
+    console.log(`Welcome to Rock Paper Scissors Lizard Spock!`);
     console.log(`Play against the computer and try win in a best of five game.`);
+    console.log(`You might be wondering which gesture beats what. Here are the possibilities:\n`);
+    RULES.forEach(rule => console.log(`     ${rule}`));
+    console.log();
+    console.log(`Play against the computer and try win in a best of five game.`);
+    console.log(`-------------------------------------------------------------`);
     console.log('Ready? Press enter to get started!')
     readline.question(); 
   },
