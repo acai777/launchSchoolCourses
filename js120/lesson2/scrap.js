@@ -53,3 +53,94 @@ let bar = {
 };
 
 bar.add.call(foo);
+
+
+////////////////////////////// //////////////////////////////
+// Examples to solidify your understanding
+////////////////////////////////////////////////////////////
+let myObj = {
+  myName: 'Adam',
+  myJob: 'research',
+  myHobby: 'basketball',
+  myAge: '26',
+};
+
+let linkObj = {
+  myName: 'Link',
+  myJob: 'saving Hyrule',
+  myHobby: 'collecting Korok seeds',
+  myAge: '????',
+
+  selfIntro() {
+    console.log(`My name is ${this.myName}, my job is ${this.myJob}, and my age is: ${this.myAge}`);
+  },
+}
+
+// linkObj.selfIntro(); // method execution context - implicitly set `this` to refer to linkObj i.e., the object you call the method on. 
+// linkObj.selfIntro.call(myObj); // invokes the method selfIntro (from linkObj), but explicitly sets the execution context to myObj. 
+// let testImplicitFunctionExecContext = linkObj.selfIntro; 
+// testImplicitFunctionExecContext(); // implicitly sets the execution context to that of the global object `global` bc is function invocation call. 
+// let permanentObj = linkObj.selfIntro.bind(myObj); 
+//     // permanently sets `this` to refer to myObj. Returns a NEW function which does not affect linkObj 
+//     // permanentObj will have myObj as `this` permanently. Cannot change that
+//     // note that permanentObj is invoked like `permanentJob()` here. But you can technically still invoke it like a method. How? See below.
+// permanentObj();
+// linkObj.testOfPermanence = permanentObj
+// linkObj.testOfPermanence();
+
+// let obj2 = {
+//   a: 'hello',
+//   b: 'world',
+//   foo: function() {
+//     [1, 2, 3].forEach(function(number) {
+//       console.log(String(number) + ' ' + this.a + ' ' + this.b);
+//     }, this);
+//   },
+// };
+
+// obj2.foo();
+
+// [1, 2, 3].forEach(function(number) {
+//   console.log(String(number) + ' ' + this.a + ' ' + this.b);
+// }, this);
+
+let turk = {
+  firstName: 'Christopher',
+  lastName: 'Turk',
+  occupation: 'Surgeon',
+  getDescription() {
+      return this.firstName + ' ' + this.lastName + ' is a '
+                                  + this.occupation + '.';
+  },
+};
+
+function logReturnVal(func, context) {
+  let returnVal = func.call(context);
+  console.log(returnVal);
+
+//   alternative solution
+//   let newFcn =  func.bind(context); 
+//   let returnVal = newFcn();
+//   console.log(returnVal);
+}
+
+// logReturnVal(turk.getDescription.bind(turk));
+
+let foo3 = {
+  a: 0,
+  incrementA: function() {
+    function increment() {
+      this.a += 1;
+    }
+
+    increment.call(this);
+  }
+};
+
+// foo3.incrementA();
+// foo3.incrementA();
+// foo3.incrementA();
+// console.log(foo.a)
+
+
+
