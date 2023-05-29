@@ -1,3 +1,4 @@
+/*
 // NOTE: Run this code from a file; don't use the REPL
 
 // bar();
@@ -141,6 +142,40 @@ let foo3 = {
 // foo3.incrementA();
 // foo3.incrementA();
 // console.log(foo.a)
+
+*/
+
+let proto = {
+  prop1: 'value1',
+  prop2: 'value2',
+  blahblah: "i don't even know anymore",
+  name: 'Boo',
+
+  testFunction() {
+    console.log(`My name is ${this.name}`);
+  }
+}
+
+let child = Object.create(proto);
+// console.log(child);
+// console.log(proto);
+
+// console.log('name' in child);
+// console.log(child.hasOwnProperty('name'));
+
+// console.log(Object.getPrototypeOf(child).hi = 'test');
+// console.log(proto);
+
+////////////////
+
+// console.log(proto.isPrototypeOf(child));
+
+console.log(Object.keys(Object.getPrototypeOf(proto)));
+
+
+
+
+
 
 
 
