@@ -47,3 +47,45 @@ console.log(Object.getPrototypeOf(testObj) === Object.prototype); // logs true!!
   // They each have a prototype property, which comes equipped with all the methods you are familiar with 
   // that come pre-equipped/available to 
   // all objects (e.g., isPrototypeOf, toString) and functions (e.g., call, bind, apply) respectively 
+
+////////////////////////////////
+////////////////////////////////
+////////////////////////////////
+  function Ninja() {
+    this.swung = true;
+  }
+  
+  let ninja = new Ninja();
+  
+  let stillSamePrototypeTest = Ninja.prototype; 
+  
+  Ninja.prototype = {
+    swingSword: function() {
+      return this.swung;
+    },
+  };
+  
+  console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(ninja))); // logs [ 'constructor' ]. 
+  console.log(Object.getPrototypeOf(ninja)); // logs {}. does NOT show the one non-enumerable property/key, `constructor`
+  // console.log(ninja.swingSword()); // throws error. Why? Think about it. 
+  
+  /*
+  `console.log(ninja.swingSword());` throws an error. Why? Think about it. 
+  The prototype was assigned to the object at Ninja.prototype when the object `ninja` was created on line 5. 
+  Thus, while you might change what object Ninja.prototype points to on lines 9-13, the function prototype 
+  is STILL the object that was PREVIOUSLY Ninja.prototype. You can test this down below:
+  */
+  
+  console.log(stillSamePrototypeTest === Object.getPrototypeOf(ninja)) // logs true. Yes; your understanding is correct.
+  
+  /*NOTE, though, that the prototype of future objects made from this constructor WILL point to the new prototype object
+  you defined at Ninja.prototype. Huh, interesting */
+  let ninja2 = new Ninja();
+  console.log(ninja2.swingSword()); // no errors
+  console.log(Object.getPrototypeOf(ninja) === Object.getPrototypeOf(ninja2)); // logs false
+  
+  // How I see it is: when a new object is made from a constructor, it's prototype is set to the object at the constructor's prototype property.
+  // If you ever change the object that the constructor's prototype property points to, you change the prototype of newly created objects made from the constructor IN THE FUTURE. Any old objects made from the constructor before you reassigned the prototype property will still have the old prototype. 
+  
+  console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(ninja2))); // only logs [ 'swingSword' ]. No constructor property!
+  
