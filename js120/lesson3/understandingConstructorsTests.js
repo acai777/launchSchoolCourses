@@ -89,3 +89,70 @@ console.log(Object.getPrototypeOf(testObj) === Object.prototype); // logs true!!
   
   console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(ninja2))); // only logs [ 'swingSword' ]. No constructor property!
   
+  // // console.log(Object.getOwnPropertyNames(Array.prototype));
+// console.log(Array.from({0: 'a', 1: 'b', 2: 'c', length: 3}));
+// console.log(Array.from({0: 'a', 1: 'b', 2: 'c', length: 2}));
+// console.log(Array.from({0: 'a', 1: 'b', 2: 'c', '-1':'hi', 'hello': 'test', length: 3})); // negative indice keys ignored
+// console.log(Array.from({0: 'a', 1: 'b', 2: 'c', '-1':'hi', 'hello': 'test', length: 5})); // negative indice keys ignored
+
+let now = new Date();
+console.log(now); // 2023-05-31T21:52:37.620Z
+
+let test = Date(); 
+console.log(test); // Wed May 31 2023 17:54:42 GMT-0400 (Eastern Daylight Time)
+console.log(typeof test); // logs 'string' 
+
+// TLDR: When Date() is called as a constructor, returns a new Date object. 
+// When called as a function, returns a string representation of the current date and time.
+
+class Rectangle {
+  constructor(length, width) {
+    this.length = length;
+    this.width = width;
+  }
+
+  getArea() {
+    return this.length * this.width;
+  }
+}
+
+let rec = new Rectangle(10, 5);
+console.log(typeof Rectangle);         // function
+console.log(rec instanceof Rectangle); // true
+console.log(rec.constructor);          // [class Rectangle]
+console.log(rec.getArea());            // 50
+
+console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(rec))); // [ 'constructor', 'getArea' ]
+
+function Dog(name, breed, weight) {
+  this.name = name;
+  this.breed = breed;
+  this.weight = weight;
+
+  return {
+    name: name,
+    breed: breed, 
+    weight: weight
+  }
+}
+
+let maxi = new Dog('Maxi', 'German Shepherd', 32);
+console.log(Object.getPrototypeOf(maxi) === Object.prototype); // true 
+console.log(Object.getPrototypeOf(maxi) === Dog.prototype); // false
+
+
+/////////////////////////////////
+function sumTwoNumbers(num1, num2) {
+  return num1 + num2;
+}
+
+let test3 = new sumTwoNumbers(1, 2); 
+// console.log(test);
+// console.log(Object.getPrototypeOf(test3) === sumTwoNumbers.prototype); // true
+// console.log(Object.getPrototypeOf(sumTwoNumbers.prototype) === Object.prototype);  // true
+// console.log(Object.getPrototypeOf(sumTwoNumbers) === Function.prototype); // true
+// console.log(Object.getPrototypeOf(Function.prototype) === Object.prototype) // true 
+
+
+// LINK: test3 --> sumTwoNumbers.prototype --> Object.prototype 
+// LINK: sumTwoNumbers --> Function.prototype --> Object.prototype
