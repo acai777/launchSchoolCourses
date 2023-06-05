@@ -1,3 +1,5 @@
+const readline = require('readline-sync');
+
 class Card {
   static CARDS = [
     'A',
@@ -84,16 +86,9 @@ class Participant {
   // isBusted() {} // put this on the twentyOne game class. feels most appropriate there. Will need to compare with value of 21, the maximum score possible. 
   // score() {} //  just feel like this does not belong here. 
 
-  revealEntireHand() {
-    console.log(Participant.joinAnd(this.hand)); 
-  }
-
-  static joinAnd(arr) {
-    if (arr.length === 2) {
-      return `${arr[0]} and ${arr[1]}`; // implicitly rely on toString method defined under Cards class. Remember: arr[X] refers to a Card object. 
-    }
-  
-    return `${arr.slice(0, arr.length - 1).join(", ")}, and ${arr.slice(-1)}`;
+  returnEntireHand() {
+    return this.hand; 
+    //console.log(Participant.joinAnd(this.hand)); 
   }
 }
 
@@ -108,17 +103,17 @@ class Dealer extends Participant {
     super(Participant);
   }
 
-  showPartialHand() { // only for case when dealer has two cards (in the beginning)
+  returnPartialHand() { // only for case when dealer has two cards (in the beginning)
     let firstCard = this.hand[0];
-    console.log(firstCard); // only show the first card. 
+    return firstCard; // only return the first card. 
   }
 }
 
 class TwentyOneGame {
   constructor() {
-    //STUB
-    // What sort of state does the game need?
-    // A deck? Two participants?
+    this.deck = new Deck(); 
+    this.player = new Player; 
+    this.dealer = new Dealer(); 
   }
 
   start() {
@@ -133,11 +128,13 @@ class TwentyOneGame {
   }
 
   dealCards() {
-    //STUB
+    this.player.hand.push(...this.deck.deck.splice(0,2)); 
+    this.dealer.hand.push(...this.deck.deck.splice(0,2)); 
   }
 
   showCards() {
-    //STUB
+    console.log("You have: " + TwentyOneGame.joinAnd(this.player.returnEntireHand()));
+    console.log("Dealer has: " + this.dealer.returnPartialHand() + " and an unknown card.")
   }
 
   playerTurn() {
@@ -149,7 +146,13 @@ class TwentyOneGame {
   }
 
   displayWelcomeMessage() {
-    //STUB
+    console.clear();
+    console.log('Welcome to Twenty-One!');
+    console.log('You will play against the computer.');
+    console.log('Each player starts with five dollars.');
+    console.log('The game will terminate once one of you has no money left.');
+    console.log('Hit enter when you are ready to begin. Good luck :)');
+    readline.question();
   }
 
   displayGoodbyeMessage() {
@@ -158,6 +161,14 @@ class TwentyOneGame {
 
   displayResult() {
     //STUB
+  }
+
+  static joinAnd(arr) {
+    if (arr.length === 2) {
+      return `${arr[0]} and ${arr[1]}`; // implicitly rely on toString method defined under Cards class. Remember: arr[X] refers to a Card object. 
+    }
+  
+    return `${arr.slice(0, arr.length - 1).join(", ")}, and ${arr.slice(-1)}`;
   }
 }
 
