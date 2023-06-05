@@ -28,6 +28,10 @@ class Square {
 
 class Board {
   constructor() {
+    this.reset();
+  }
+
+  reset() {
     this.squares = {};
     for (let counter = 1; counter <= 9; counter += 1) {
       this.squares[String(counter)] = new Square();
@@ -52,7 +56,6 @@ class Board {
 
   displayWithClear() {
     console.clear();
-    console.log("");
     console.log("");
     this.display();
   }
@@ -114,6 +117,8 @@ class TTTGame {
     [ "3", "5", "7" ],            // diagonal: bottom-left to top-right
   ];
 
+  static POSSIBLE_ANSWERS = ['y', 'yes', 'n', 'no'];
+
   constructor() {
     this.board = new Board();
     this.human = new Human();
@@ -123,7 +128,20 @@ class TTTGame {
   play() {
     this.displayWelcomeMessage();
     this.board.display();
+    this.promptUserToContinueGame(); 
+
     while (true) {
+      this.playOneGame(); 
+      if (!this.playAgain()) break;
+    }
+
+    this.displayGoodbyeMessage();
+  }
+
+  playOneGame() {
+    this.board.reset(); 
+    while (true) {
+      this.board.displayWithClear();
       this.humanMoves();
       if (this.gameOver()) break;
 
@@ -135,17 +153,36 @@ class TTTGame {
 
     this.board.displayWithClear();
     this.displayResults();
-    this.displayGoodbyeMessage();
+  }
+  promptUserToContinueGame() {
+    console.log(`Press enter to start the game.`);
+    readline.question();
+  }
+
+  playAgain() {
+    console.log('Play again? (y or n)');
+    let answer = readline.question().toLowerCase();
+  
+    while (!TTTGame.POSSIBLE_ANSWERS.includes(answer)) {
+      console.log('Invalid response. Please try again. (y or n)');
+      answer = readline.question().toLowerCase();
+    }
+  
+    if (answer === 'y' || answer === 'yes') {
+      return true;
+    }
+
+    return false;
   }
 
   displayWelcomeMessage() {
     console.clear();
     console.log("Welcome to Tic Tac Toe!");
-    console.log("");
   }
 
 
   displayGoodbyeMessage() {
+    console.clear();
     console.log("Thanks for playing Tic Tac Toe! Goodbye!");
   }
 
