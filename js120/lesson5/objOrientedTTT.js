@@ -170,7 +170,7 @@ class TTTGame {
 
     while (true) {
       let validChoices = this.board.unusedSquares();
-      const prompt = `Choose a square (${validChoices.join(", ")}): `;
+      const prompt = `Choose a square (${TTTGame.joinOr(validChoices, ", ")}): `;
       choice = readline.question(prompt);
 
       if (validChoices.includes(choice)) break;
@@ -191,6 +191,16 @@ class TTTGame {
     } while (!(validChoices.includes(choice)));
 
     this.board.markSquareAt(choice, this.computer.getMarker());
+  }
+
+  static joinOr(arr, firstDel = ", ", lastDel = "or") {
+    if (arr.length === 1) {
+      return arr[0];
+    } else if (arr.length === 2) {
+      return arr.join(` ${lastDel} `);
+    } else {
+      return arr.slice(0, arr.length - 1).join(firstDel) + firstDel + lastDel + ' ' + arr.slice(-1);
+    }
   }
 
   gameOver() {
