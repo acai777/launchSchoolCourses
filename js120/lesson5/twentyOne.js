@@ -295,3 +295,48 @@ class TwentyOneGame {
 
 let game = new TwentyOneGame();
 game.start();
+
+/* 
+NEXT:
+
+need to finish logic for one single round. This means implementing this.dealerTurn() and this.displayResult(), and getting rid of the placeholders to exit the while loops. 
+
+
+
+
+
+
+
+
+
+Can reference playRound() function from your procedural twenty one game:
+function playRound(boxScore) {
+  // Initial setup of deck and relevant variables.
+  console.clear();
+  let shuffledDeck = initializeDeck();
+  let [playerCards, computerCards] = initializeEmptyHands();
+  let score = generateScoreBoard();
+  initialDealing(shuffledDeck, playerCards, computerCards);
+  updateScores(score, playerCards, computerCards);
+  displayCards(playerCards, computerCards, boxScore);
+
+  // Player turn
+  playerTurn(shuffledDeck, playerCards, computerCards, score, boxScore);
+  displayCards(playerCards, computerCards, boxScore);
+
+  // Either end round bc playerScore > 21, or Computer turn.
+  if (checkIfLost(PLAYER, score)) {
+    playerLostFirst(playerCards, computerCards, score, boxScore);
+  } else {
+    contRestOfRound(shuffledDeck, playerCards, computerCards, score, boxScore);
+  }
+
+  // Decide winner; end of round.
+  displayWinnerRound(decideWinner(score), score);
+
+  // Prompt user to move on to next round, if no winner of best of five
+  if (!detectBestOfFiveWinner(boxScore)) {
+    readline.question('\nPress enter to move on to the next round...');
+  }
+}
+*/
