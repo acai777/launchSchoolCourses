@@ -302,14 +302,7 @@ NEXT:
 need to finish logic for one single round. This means implementing this.dealerTurn() and this.displayResult(), and getting rid of the placeholders to exit the while loops. 
 
 
-
-
-
-
-
-
-
-Can reference playRound() function from your procedural twenty one game:
+Can reference playRound() function from your procedural twenty one game
 function playRound(boxScore) {
   // Initial setup of deck and relevant variables.
   console.clear();
