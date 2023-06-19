@@ -165,9 +165,21 @@ function makeList() {
 // }
 
 
-function div(first, second) {
-  return first / second;
-}
+// bar();              // logs undefined
+// var foo = 'hello';
 
-let result = div(1, 0);
-console.log(result); // => Infinity
+// function bar() {
+//   console.log(foo);
+// }
+
+
+let left = 7;
+let right = 22;
+
+
+let array = [1,2,3,4,5];
+let [ ...newArray ] = array;
+
+console.log(newArray);
+console.log(array);
+console.log(newArray === array);
