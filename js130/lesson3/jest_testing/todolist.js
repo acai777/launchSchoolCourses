@@ -63,7 +63,8 @@ class TodoList {
   }
 
   forEach(callback) {
-    this.todos.forEach(todo => callback(todo));
+    // this.todos.forEach(todo => callback(todo));
+    this.todos.forEach(callback);
   }
 
   filter(callback) {

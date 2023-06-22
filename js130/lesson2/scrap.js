@@ -180,6 +180,19 @@ let right = 22;
 let array = [1,2,3,4,5];
 let [ ...newArray ] = array;
 
-console.log(newArray);
-console.log(array);
-console.log(newArray === array);
+// console.log(newArray);
+// console.log(array);
+// console.log(newArray === array);
+
+class Cat {
+  constructor(name) {
+    this.name = name;
+  }
+
+  miaow() {
+    return `${this.name} is miaowing.`;
+  }
+}
+
+let testCat = new Cat();
+console.log(testCat);
