@@ -73,5 +73,4 @@ class RomanNumeral {
   }
 }
 
-// || Number(String(value)[0]) - Number(String(currNum)[0]) === 1
 module.exports = RomanNumeral; 
