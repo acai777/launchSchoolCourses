@@ -19,7 +19,7 @@ The return value of `classify` is a string. You get either `deficient`, `perfect
 
 class PerfectNumber {
   static classify(num) {
-    if (num < 0) {
+    if (num <= 0) {
       throw new Error('Cannot use negative numbers');
     }
 
