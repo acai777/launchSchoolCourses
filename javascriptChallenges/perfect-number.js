@@ -17,8 +17,8 @@ This object has one required method `classify` which takes in one argument, a nu
 The return value of `classify` is a string. You get either `deficient`, `perfect`, or `abundant`. The `classify` method basically calculates the Aliquot sum and then compares with the initial input to determine if it is perfect, deficient, or abundant
 */
 
-let PerfectNumber = {
-  classify(num) {
+class PerfectNumber {
+  static classify(num) {
     if (num < 0) {
       throw new Error('Cannot use negative numbers');
     }
