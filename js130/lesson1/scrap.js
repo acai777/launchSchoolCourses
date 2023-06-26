@@ -1,22 +1,31 @@
-function forEach(arr, callback, thisArg) {
-  for (let index = 0; index < arr.length; index += 1) {
-    callback.call(thisArg, arr[index], index, arr);
-  }
+// function logHi() {
+//   console.log("Hi!");
+// }
+
+// function logBye() {
+//   console.log("Bye!");
+// }
+
+// let myArray = [1,2,3,4,5];
+// module.exports = {logHi, logBye, myArray};
+
+if ('Four score'.match(/\s/)) {
+  console.log('matched 1');
+}
+if ("Four\tscore".match(/\s/)) {
+  console.log('matched 2');
+}
+if ("Four-score\n".match(/\s/)) {
+  console.log('matched 3');
+}
+if ("Four-score".match(/\s/)) {
+  console.log('matched 4');
 }
 
-class Foo {
-  constructor(prefix) {
-    this.prefix = prefix;
-  }
 
-  showItem(item) {
-    console.log(this.prefix, item);
-  }
-}
 
-["a", "b", "c"].forEach(function(value, index, arr) {
-  console.log(`After ${value} comes ${arr[index + 1]}`);
-});
+
+
 
 
 
