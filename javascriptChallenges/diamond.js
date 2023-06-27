@@ -69,6 +69,7 @@ class Diamond {
 
     return [...letterRange, ...letterRange.reverse().slice(1)];
   }
+  
   static makeDiamond(letter) {
     let result = [];
     let maxWidth = Diamond.getWidthMax(letter);
