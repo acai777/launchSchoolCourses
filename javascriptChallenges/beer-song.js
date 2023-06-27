@@ -24,7 +24,9 @@ class BeerSong {
   static wholeSong = wholeSong().split(/\n\n/).reverse();
 
   static verse(num) {
-    if (num !== 0) return BeerSong.wholeSong[num] + '\n';
+    if (num !== 0) {
+      return BeerSong.wholeSong[num] + '\n';
+    }
     return BeerSong.wholeSong[num];
   }
 
@@ -33,8 +35,9 @@ class BeerSong {
       [num1, num2] = [num2, num1];
     }
 
-    if (num2 !==0) return BeerSong.wholeSong.slice(num2, num1 + 1).reverse().join("\n\n") + '\n';
-
+    if (num2 !==0) {
+      return BeerSong.wholeSong.slice(num2, num1 + 1).reverse().join("\n\n") + '\n';
+    }
     return BeerSong.wholeSong.slice(num2, num1 + 1).reverse().join("\n\n"); 
   }
 
