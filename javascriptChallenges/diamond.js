@@ -59,24 +59,26 @@ class Diamond {
     return rowMaxWidth; 
   }
 
+  static letterRange(letter) {
+    let letterRange = [];
+    for (let index = 0; index < Diamond.LETTERS.length; index += 1) {
+      let currLetter = Diamond.LETTERS[index];
+      letterRange.push(currLetter);
+      if (currLetter === letter) break; 
+    }
+
+    return [...letterRange, ...letterRange.reverse().slice(1)];
+  }
   static makeDiamond(letter) {
     let result = [];
     let maxWidth = Diamond.getWidthMax(letter);
+    let letterRange = Diamond.letterRange(letter);
 
-    // Form first top half of diamond
-    let letterIndex = Diamond.LETTERS.indexOf(letter);
-    for (let index = 0; index < letterIndex; index +=1) {
-      let currLetter = Diamond.LETTERS[index];
+    for (let index = 0; index < letterRange.length; index +=1) {
+      let currLetter = letterRange[index];
       result.push(Diamond.returnRow(currLetter, maxWidth));
     }
 
-    result.push(Diamond.returnRow(letter, maxWidth));
-
-    // Now, form the bottom half of triangle
-    for (let index = letterIndex - 1; index >= 0; index -= 1) {
-      let currLetter = Diamond.LETTERS[index];
-      result.push(Diamond.returnRow(currLetter, maxWidth));
-    }
     return result.join("");
   }
 
