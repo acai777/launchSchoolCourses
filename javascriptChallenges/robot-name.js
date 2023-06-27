@@ -31,6 +31,7 @@ Process:
 class Robot {
   static TAKEN_NAMES = [];
   static LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  
   constructor() {
     let newName = this.makeRandomName(); 
     while (Robot.TAKEN_NAMES.includes(newName)) {
