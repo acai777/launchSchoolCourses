@@ -60,19 +60,22 @@ class Diamond {
   }
 
   static makeDiamond(letter) {
-    let firstHalf = [];
+    let result = [];
     let maxWidth = Diamond.getWidthMax(letter);
 
     let letterIndex = Diamond.LETTERS.indexOf(letter);
     for (let index = 0; index < letterIndex; index +=1) {
       let currLetter = Diamond.LETTERS[index];
-      firstHalf.push(Diamond.returnRow(currLetter, maxWidth));
+      result.push(Diamond.returnRow(currLetter, maxWidth));
     }
 
+    result.push(Diamond.returnRow(letter, maxWidth));
+
     // Now, form the other half 
-    let middleRow = Diamond.returnRow(letter, maxWidth); 
-    let lastHalf = firstHalf.slice().reverse(); 
-    let result = [...firstHalf, middleRow, ...lastHalf]; 
+    for (let index = letterIndex - 1; index >= 0; index -= 1) {
+      let currLetter = Diamond.LETTERS[index];
+      result.push(Diamond.returnRow(currLetter, maxWidth));
+    }
     return result.join("");
   }
 
