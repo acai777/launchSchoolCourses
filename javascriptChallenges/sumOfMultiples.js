@@ -70,14 +70,6 @@ module.exports = SumOfMultiples;
 
 
 
-function test(...myArr) {
-  console.log(myArr);
-}
-
-test();
-
-
-
 
 
 
