@@ -63,6 +63,7 @@ class Diamond {
     let result = [];
     let maxWidth = Diamond.getWidthMax(letter);
 
+    // Form first top half of diamond
     let letterIndex = Diamond.LETTERS.indexOf(letter);
     for (let index = 0; index < letterIndex; index +=1) {
       let currLetter = Diamond.LETTERS[index];
@@ -71,7 +72,7 @@ class Diamond {
 
     result.push(Diamond.returnRow(letter, maxWidth));
 
-    // Now, form the other half 
+    // Now, form the bottom half of triangle
     for (let index = letterIndex - 1; index >= 0; index -= 1) {
       let currLetter = Diamond.LETTERS[index];
       result.push(Diamond.returnRow(currLetter, maxWidth));
