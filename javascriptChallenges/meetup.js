@@ -1,6 +1,13 @@
 /*
 2:25pm - 310pm. Took about 45min. This question was particularly difficult because you had to learn about the Date constructor and identify which methods were important while simulating a test environment. Solution is MUCH uglier than suggested one. If go back and have time, would refactor heavily and consider easier logic. Learned a lot about the Date constructor and its quirks.
 
+what did you learn about the Date constructor:
+days start from 1 (not 0-index);
+to get the last day of a month, can have the day be 0, and change the month to be month + 1. 
+-month is 0-indexed i.e., 0 - 11. 
+-getDay() returns you the day, where Sunday = 0, Saturday = 6;
+-you didn't use getDate(), but the soln did, and it returns the day of the month for this date. 
+
 -class Meetup
   -two inputs. First is number for year (e.g., 2013), second is number representing the month (number 1-12).
 -`day()` instance method. Takes in two arguments. 
