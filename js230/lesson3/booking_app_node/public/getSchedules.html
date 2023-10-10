@@ -1,0 +1,92 @@
+
+<body>
+
+  <form action="/api/staff_members" method="POST" id="add-staff">
+    <label for="email">Enter your name: </label>
+    <input type="email" name="email" id="email"/>
+    <label for="name">Enter your name: </label>
+    <input type="text" name="name" id="name"/>
+    <input type="submit" value="Submit" />
+    <div id="test"></div>
+  </form>
+
+  <br><br>
+</body>
+
+/////////////////////////////////////////// 
+<script>
+    function retrieveAvailableSchedules() {
+      let xhr = new XMLHttpRequest(); 
+      xhr.open("GET", "/api/schedules"); 
+      xhr.responseType = 'json';
+      xhr.timeout = 5000 
+  
+      // Load successful
+      xhr.addEventListener('load', event => {
+        let data = xhr.response; 
+  
+        // Want schedules that are still available. These are ones where `student_email` key is null 
+        let openSchedules = data.filter(schedule => schedule["student_email"] === null)
+        let ctOpenSchedules = openSchedules.reduce((acc, currSch) => {
+          let staffId = currSch["staff_id"];
+          acc[staffId] = acc[staffId] || 0;
+          acc[staffId] += 1; 
+          return acc; 
+        }, {});
+  
+        if (Object.entries(ctOpenSchedules).length > 0) {
+          let result = '';
+          Object.entries(ctOpenSchedules).forEach(nestedArr => {
+            result += `staff ${nestedArr[0]}: ${nestedArr[1]}\n`;
+          });
+  
+          alert(result);
+        } else {
+          alert('There are currently no schedules available.');
+        }
+      });
+  
+      // Set timeout to be 5 seconds
+      xhr.addEventListener('timeout', event => {
+        alert("The request timed out. Please try again.")
+      });
+  
+      // Completion Message 
+      xhr.addEventListener('loadend', event => {
+        alert('The request has completed.');
+      });
+  
+      xhr.send();
+    }
+  
+    let addStaffForm = document.getElementById("add-staff");
+    addStaffForm.addEventListener("submit", event => {
+      event.preventDefault(); 
+
+      let data = new FormData(addStaffForm);
+
+      let xhr = new XMLHttpRequest(); 
+      xhr.open(addStaffForm.method, `${addStaffForm.getAttribute('action')}`);
+      // xhr.responseType = 'json';
+
+      xhr.addEventListener("load", event => {
+        if (xhr.status === 201) {
+          // console.log(xhr.getResponseHeader('content-type'));
+          // console.log(xhr);
+          // console.log(xhr.response);
+          // console.log(xhr.responseText);
+
+          let data = JSON.parse(xhr.response);
+          alert(`Successfully created staff with id: ${data.id}`);
+          addStaffForm.reset();
+        
+        } else if (xhr.status === 400) {
+          console.log(xhr.getResponseHeader('content-type'))
+          alert(`${xhr.responseText}`);
+        }
+      });
+
+      xhr.send(data);
+
+    });
+</script>

@@ -1,0 +1,31 @@
+main {
+  display: grid;
+  max-width: 1000px;
+  margin: auto;
+  grid-template-columns: 400px 400px;
+  grid-template-rows: 300px 300px;
+  justify-content: space-evenly;
+}
+
+img {
+  width: 100%;
+}
+
+figcaption {
+  display: none;
+  position: absolute;
+  background-color: #000C;
+  color: aqua;
+  width: 360px;
+  transition: opacity 300ms ease-in-out;
+}
+
+.show {
+  display: block;
+  opacity: 1;
+}
+
+.hide {
+  display: block;
+  opacity: 0;
+}

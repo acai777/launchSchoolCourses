@@ -1,0 +1,14 @@
+.hide {
+  display: none;
+}
+
+.show {
+  display: block; 
+}
+
+main {
+  width: 50%;
+  margin: 0 auto;
+  border-style: solid;
+  padding: 1em;
+}

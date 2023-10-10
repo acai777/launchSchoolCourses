@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Title</title>
+  </head>
+  <body>
+    <header>Header<header>
+    <main>
+      <div>
+        <section>
+          <hi>H1</hi>
+          <p>Hello</p>
+          <p>World</p>
+        </section>
+      </div>
+    </main>
+    <footer><span class="emphasis"></span></footer>
+  </body>
+</html>
+
+<!-- 
+> console.log(document.querySelector('div').parentNode.parentNode.tagName);
+= 'BODY'
+Tells you that one of the three body child elements have a child div node. Dunno which one yet. Query selector also selects for the FIRST occurrence of the CSS selector, so know that none of body's 3 children elemnt nodes are divs
+
+> console.log(document.querySelector('div section').children[2].nextElementSibling);
+= null
+Not sure about this one. Means the div has a section inside....? and has THREE element nodes (not 2; remember, we are 0-indexed)
+
+> console.log(document.querySelectorAll('div').length);
+= 1
+Means there is only one div
+
+> var nodeA = document.body.firstElementChild;
+Not sure about this one yet. See if use later. 
+
+> console.log(document.querySelector('footer').children.length);
+= 1
+OK. So of body's three children elements, footer is one of them, and has ONE child. Could its child be the div...? haha. 
+
+> console.log(document.querySelector('body').replaceChild(
+>   document.querySelector('footer'), document.body.firstElementChild).tagName);
+= 'HEADER'
+this part tells us that body's first
+child element is a header tag. We replace it with footer, so we drop the header tag entirely. And move the footer tage to the first child place. Still do not know what the middle tag is. 
+
+> console.log(document.body.appendChild(nodeA));
+= <header>Header<header>
+OK. So confirmed: body's first child is `<header>Header<header>`. 
+
+> console.log(document.querySelector('section').textContent.split("\n").map(function(text) {
+>   return text.trim();
+> }).filter(function(text) {
+>   return text.length > 0;
+> }));
+= ["H1", "Hello", "World"]
+This one is tough. Hm... but I think I know what is going on :D See below
+
+> console.log(document.querySelector('section').children);
+= HTMLCollection(3) [h1, p, p]
+> console.log(document.querySelector('section').textContent);
+= "
+            H1
+            Hello
+            World
+          "
+Yeah.... This confirms your thinking
+
+> console.log(document.querySelector('span.emphasis').parentNode.tagName);
+= 'FOOTER'
+Says that footer has a span inside of it with a class of emphasis... 
+-->
+
+<div>
+  <section>
+    <hi>H1</hi>
+    <p>Hello</p>
+    <p>World</p>
+  </section>
+</div>
