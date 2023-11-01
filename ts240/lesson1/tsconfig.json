@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "commonjs",
+    "strict": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true
+    // "noImplicitAny": false // turn this on if you don't want an implicit "any" type to raise an error
+    // "noUncheckedIndexedAccess": true // With this option enabled accessing numbers[5] would give us the type number | undefined back rather than just a number. This will force us to check for undefined whenever we access an array element by its index.
+    
+  },
+  "include": ["./src/**/*"],
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Recommended"
+}
