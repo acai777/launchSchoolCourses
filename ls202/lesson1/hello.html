@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Welcome!</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="my.css">
+  </head>
+
+  <body>
+    <form method="get" action="#">
+      <fieldset>
+        <dl>
+          <dt>
+            <label for="firstName">First Name</label>
+          </dt>
+          <dd>
+            <input type="text" id="firstName" name="firstName" required>
+          </dd>
+          <dt>
+            <label for="lastName">Last Name</label>
+          </dt>
+          <dd>
+            <input type="text" id="lastName" name="lastName" required>
+          </dd>
+          <dt>
+            <label for="email">Email</label>
+          </dt>
+          <dd>
+            <input type="email" id="email" name="email" required autocomplete="off" autocorrect="off" autocapitalize="none">
+          </dd>
+          <dt>
+            <label for="address">Address</label>
+          </dt>
+          <dd>
+            <input type="address" id="address" name="address" required>
+          </dd>
+          <dt>
+            <label for="phoneNumber">Phone Number</label>
+          </dt>
+          <dd>
+            <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="###-###-####">
+          </dd>
+
+          <dt>
+            <label for="phoneType" id="phoneType">Phone Type</label>
+          </dt>
+          <dd>
+            <select name="phoneType" id="phoneType">
+              <option value="home" selected>Home</option>
+              <option value="business">Business</option>
+              <option value="mobile">Mobile</option>
+            </select>
+          </dd>
+
+          <dt>
+            <label for="message">Message</label>
+          </dt>
+          <dd>
+            <textarea id="message" name="message" rows="6" cols="80" placeholder="Type your message here."></textarea>
+          </dd>
+
+          <input type="button" value="Submit">
+        </dl>
+      </fieldset>
+    </form>
+
+  </body>
+</html>
+
+
